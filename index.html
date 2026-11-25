@@ -520,6 +520,12 @@ function sndUnlock(){
   }
 }
 function sndMute(m){ SND.muted=m; try{ localStorage.setItem('yael-mute', m?'1':'0'); }catch(e){} if(SND.master) SND.master.gain.setTargetAtTime(m?0:0.9, SND.ctx.currentTime, 0.02); const b=$('btnMute'); b.textContent=m?'🔇':'🔊'; b.classList.toggle('off',m); }
+/* 25.11.2026, Nitzan: leaving the app without closing it stops the music and sounds; coming back starts them again */
+function sndBackground(hidden){ if(!SND.ctx) return; try{ if(hidden){ SND.ctx.suspend(); if(SND.silent) SND.silent.pause(); } else if(SND.unlocked){ SND.ctx.resume(); if(SND.silent) SND.silent.play().catch(()=>{}); } }catch(e){} }
+document.addEventListener('visibilitychange',()=>sndBackground(document.hidden));
+window.addEventListener('pagehide',()=>sndBackground(true));
+window.addEventListener('pageshow',()=>{ if(!document.hidden) sndBackground(false); });
+document.addEventListener('pointerdown',()=>{ if(SND.ctx && SND.unlocked && !document.hidden && SND.ctx.state==='suspended') SND.ctx.resume(); },true); /* some phones allow resume only after a touch */
 function tone(type, f0, f1, t0, dur, vol, opts){
   if(!SND.ctx) return; const c=SND.ctx, o=c.createOscillator(), g=c.createGain(); opts=opts||{};
   o.type=type; o.frequency.setValueAtTime(f0, t0); if(f1&&f1!==f0) o.frequency.exponentialRampToValueAtTime(f1, t0+dur);
