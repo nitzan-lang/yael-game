@@ -80,6 +80,12 @@
   #btnHorn img{width:30px;height:30px;image-rendering:pixelated}
   #btnHorn.pressed{transform:translateY(3px);border-bottom-width:2px}
   #btnHorn.used{opacity:.45;filter:grayscale(1)}
+  /* 25.11.2026, Nitzan: on a phone the driver button was below the screen. In chapter 2 the whole play column shrinks so everything fits in the screen height */
+  #s-play.bus #playwrap{width:min(100%, calc((100vh - var(--busReserve)) * 0.75));align-self:center}
+  @supports (height:100dvh){ #s-play.bus #playwrap{width:min(100%, calc((100dvh - var(--busReserve)) * 0.75))} }
+  #s-play.bus{--busReserve:218px}
+  #s-play.bus #btnHorn{font-size:18px;padding:8px;margin-top:8px}
+  #s-play.bus #btnHorn img{width:26px;height:26px}
   .rules li{margin-bottom:6px;font-size:15px}
   .rules li.pic{list-style:none;display:flex;align-items:center;gap:10px;margin-inline-start:-18px;background:var(--panel2);border-radius:6px;padding:6px 8px}
   .rules li.pic img{width:84px;height:66px;image-rendering:pixelated;flex:none;background:#15112b;border-radius:4px}
@@ -1745,7 +1751,7 @@ function startPlay(){
          msg:null, msgT:0, pause:0, over:false, won:false, keys:{}, pose:'ready', poseT:0 };
   musicStop(); if(mode==='catch'){ musicStart(MUS_MORNING); } if(mode==='bus'){ musicStart(MUS_BUS); } if(mode==='coffee'){ initCoffee(); musicStart(); } if(mode==='living'){ initLiving(); musicStart(MUS_LIVING); } if(mode==='dinner'){ initDinner(); musicStart(MUS_DINNER); } if(mode==='stories'){ initStories(); musicStart(MUS_STORIES); } if(mode==='night'){ initNight(); musicStart(MUS_NIGHT); }
   $('goalText').textContent=cur().goal;
-  $('btnHorn').style.display = mode==='bus' ? 'flex' : 'none'; if(mode==='bus'){ play.hornLeft=HORN_MAX; hornLabel(); }
+  $('btnHorn').style.display = mode==='bus' ? 'flex' : 'none'; $('s-play').classList.toggle('bus', mode==='bus'); if(mode==='bus'){ play.hornLeft=HORN_MAX; hornLabel(); }
   $('barIcons').style.display = mode==='bus' ? 'flex' : 'none'; $('barBus').style.display = mode==='bus' ? 'block' : 'none';
   updateGoal();
   show('s-play');
