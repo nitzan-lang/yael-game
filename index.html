@@ -88,6 +88,10 @@
   #btnHorn.pressed{transform:translateY(3px);border-bottom-width:2px}
   #btnHorn.used{opacity:.45;filter:grayscale(1)}
   /* 25.11.2026, Nitzan: on a phone the driver button was below the screen. In chapter 2 the whole play column shrinks so everything fits in the screen height */
+  /* 25.11.2026, Nitzan: on tall phones spread the screen over the full height. The game picture keeps its size; it sits in the middle and the goal line + bar go to the bottom edge. Title: picture in the middle, button at the bottom. Bus chapter keeps its own layout */
+  @supports (height:100dvh){ body,#app{min-height:100dvh} }
+  #s-play:not(.bus) #game{margin-top:auto;margin-bottom:auto}
+  #s-title #titleScene{flex:1;display:flex;flex-direction:column;justify-content:center}
   #s-play.bus #playwrap{width:min(100%, calc((100vh - var(--busReserve)) * 0.75));align-self:center}
   @supports (height:100dvh){ #s-play.bus #playwrap{width:min(100%, calc((100dvh - var(--busReserve)) * 0.75))} }
   #s-play.bus{--busReserve:218px}
