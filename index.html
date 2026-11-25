@@ -67,6 +67,9 @@
   /* final message (Nitzan, 25.11.2026): his photo, the text is typed into the empty box drawn in the photo */
   #finalCard{position:relative;width:min(100%, calc((100vh - 150px) * 0.5628));aspect-ratio:941/1672;margin:0 auto 12px}
   #finalImg{display:block;width:100%;height:100%;border-radius:6px}
+  /* 25.11.2026, Nitzan: the photo above the box is hidden until the yellow line appears. 64% = the empty gap between the photo (ends ~62%) and the box (starts 66%); color = the photo's background */
+  #finalCover{position:absolute;left:0;right:0;top:0;height:64%;background:#1c0732;border-radius:6px 6px 0 0;transition:opacity .9s ease;pointer-events:none}
+  #finalCover.off{opacity:0}
   #finalText{position:absolute;left:9.5%;right:9.5%;top:70.6%;bottom:10%;overflow:hidden;direction:rtl;text-align:right;white-space:pre-line;color:#f4f1ff;font-weight:700;line-height:1.45;font-size:14px}
   #finalText .reveal{color:#f5c04a}
   #s-final #btnFinalMap{align-self:center}
@@ -173,7 +176,7 @@
 
   <!-- final message from Nitzan (after chapter 7) -->
   <section class="screen" id="s-final">
-    <div id="finalCard"><img id="finalImg" src="assets/final_photo_v2.jpg" alt=""><div id="finalText"></div></div>
+    <div id="finalCard"><img id="finalImg" src="assets/final_photo_v2.jpg" alt=""><div id="finalCover"></div><div id="finalText"></div></div>
     <button id="btnFinalMap">למפה</button>
   </section>
 
@@ -1599,6 +1602,7 @@ function showFinal(){
   finalTimers.forEach(clearTimeout); finalTimers=[];
   const F=FINAL_MSG, box=document.getElementById('finalText'); box.innerHTML='';
   const a=document.createElement('span'), b=document.createElement('span'), c=document.createElement('span'); b.className='reveal'; box.append(a,b,c);
+  document.getElementById('finalCover').classList.remove('off');
   show('s-final'); finalFit();
   /* 25.11.2026, Nitzan: on his phone the photo appeared only late in the letter. Start typing only after the photo is ready (max 5 s wait) */
   const img=document.getElementById('finalImg'); let started=false; const run=++finalRun;
@@ -1608,11 +1612,12 @@ function showFinal(){
 }
 let finalRun=0;
 function finalType(F,a,b,c){
-  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ a.textContent=F.parts[0]; b.textContent=F.parts[1]; c.textContent=F.parts[2]; return; }
+  const cover=document.getElementById('finalCover');
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ a.textContent=F.parts[0]; b.textContent=F.parts[1]; c.textContent=F.parts[2]; cover.classList.add('off'); return; }
   const at=(ms,fn)=>finalTimers.push(setTimeout(fn,ms));
   const type=(el,txt,t0)=>{ const ch=Array.from(txt); ch.forEach((_,i)=>at(t0+i*F.letterMs,()=>{ el.textContent=ch.slice(0,i+1).join(''); })); return t0+ch.length*F.letterMs; }; /* Array.from keeps the emoji in one piece */
   let t=type(a, F.parts[0], F.startDelay);
-  t+=F.beforeReveal; at(t,()=>{ b.textContent=F.parts[1]; });
+  t+=F.beforeReveal; at(t,()=>{ b.textContent=F.parts[1]; cover.classList.add('off'); }); /* the photo appears with the yellow line */
   t+=F.revealHold; type(c, F.parts[2], t);
 }
 document.getElementById('btnFinalMap').onclick=()=>{ finalTimers.forEach(clearTimeout); finalTimers=[]; renderMap(); show('s-map'); };
