@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>היום של יעל</title>
+<link rel="preload" as="image" href="assets/title_yael_hero.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#15112b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2516,7 +2517,16 @@ function titleDraw(){
   const bob=Math.round(Math.sin(t*2.4)*1.5);
   const yi=TITLE.img.yael_ready;
   const hi=TITLE.img.title_yael_hero;
-  if(P.yaelHero&&hi.complete&&hi.naturalWidth){ /* title_yael_hero.png, 768x768 from ChatGPT (25.11.2026), shown at 1/3 = 1:1 canvas pixels */
+  /* 25.11.2026, Nitzan: for half a second the old blurry Yael (yael_ready at 2x) showed while the big picture was still loading.
+     Now Yael and the family appear together, with a short fade, only when the big picture and the family are ready.
+     The old picture is used only if the big one has not loaded after 4 s */
+  const famOk=['nitzan','yotam','chupa'].every(n=>{ const m=TITLE.img['intro_'+n]; return m.complete&&m.naturalWidth; });
+  const heroOk=!!(hi.complete&&hi.naturalWidth), waited=performance.now()-TITLE.t0>4000;
+  const showChars=(heroOk&&famOk)||waited;
+  if(showChars&&!TITLE.readyAt) TITLE.readyAt=performance.now();
+  c.globalAlpha=!showChars?0:still?1:Math.min(1,(performance.now()-TITLE.readyAt)/300);
+  if(!showChars){ /* nothing yet */ }
+  else if(P.yaelHero&&heroOk){ /* title_yael_hero.png, 768x768 from ChatGPT (25.11.2026), shown at 1/3 = 1:1 canvas pixels */
     c.drawImage(hi, P.yaelHero[0], P.yaelHero[1]+bob, 256, 256);
   } else if(P.yaelBig){ /* head to waist, 2x (whole pixels), Nitzan asked for a bigger, dramatic Yael (25.11.2026) */
     if(yi.complete&&yi.naturalWidth) c.drawImage(yi, P.yaelBig[0], P.yaelBig[1]+bob, 512, 512);
@@ -2527,6 +2537,7 @@ function titleDraw(){
   shadow(P.nitzan[0],P.nitzan[1],26); intro('nitzan',P.nitzan);
   shadow(P.chupa[0],P.chupa[1],18); intro('chupa',P.chupa);
   shadow(P.yotam[0],P.yotam[1],20); intro('yotam',P.yotam);
+  c.globalAlpha=1;
   /* bottom fade (start button area) */
   g=c.createLinearGradient(0,296,0,H); g.addColorStop(0,'rgba(21,17,43,0)'); g.addColorStop(0.55,'rgba(21,17,43,0.92)'); g.addColorStop(1,'#15112b');
   c.fillStyle=g; c.fillRect(0,296,W,H-296);
