@@ -45,6 +45,13 @@
   /* map */
   .chapter{display:flex;align-items:center;gap:12px;background:var(--panel);border:3px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:10px;cursor:pointer}
   .chapter.locked{opacity:.55;cursor:default}
+  #cheatBox{text-align:center;margin-top:18px;font-size:12px}
+  #cheatLink{color:var(--muted);opacity:.5;text-decoration:none}
+  #cheatForm{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px}
+  #cheatForm[hidden]{display:none}
+  #cheatIn{width:120px;font:inherit;font-size:16px;padding:8px;border-radius:6px;border:2px solid var(--line);background:var(--panel2);color:var(--text)}
+  #cheatOk{width:auto;margin:0;padding:8px 14px;font-size:15px}
+  #cheatMsg{min-height:16px;margin-top:6px;color:var(--muted)}
   .chapter.done{border-color:var(--good)}
   .chapter .icon{width:48px;height:48px;background:var(--panel2);border-radius:4px;display:flex;align-items:center;justify-content:center;flex:none}
   .chapter .t{font-weight:900;font-size:17px}
@@ -113,6 +120,7 @@
     <h2 style="margin:4px 0 10px">המפה של היום</h2>
     <div id="mapList"></div>
     <p class="muted center" id="mapHint">לחצי על פרק פתוח כדי לשחק</p>
+    <div id="cheatBox"><a href="#" id="cheatLink">קוד</a><form id="cheatForm" hidden><input id="cheatIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr"><button type="submit" class="ghost" id="cheatOk">אישור</button></form><div id="cheatMsg"></div></div>
   </section>
 
   <!-- dialog -->
@@ -414,6 +422,7 @@ const ITEM_IMG={};
 for(const k of ['glasses','phone','keys','coffee','carbs','guava','shoe']){ const im=new Image(); im.src='assets/item_'+k+'.png'; ITEM_IMG[k]=im; }
 const ITEM_SIZE=30;
 const HEART = ["..rr.rr..",".rrrrrrr.",".rrrrrrr.","..rrrrr..","...rrr...","....r...."];
+const SKULL_ICON={pal:{w:'#f1efe8', k:'#15112b'}, px:["...wwwww...",".wwwwwwwww.","wwwwwwwwwww","wwwwwwwwwww","wkkkwwwkkkw","wkkkwwwkkkw","wwwwwkwwwww",".wwwkkkwww.","..wwwwwww..","..wkwkwkw..","..wwwwwww.."]};
 const MAP_ICONS = {
   home:{pal:{r:'#d85a30', w:'#f1efe8', y:'#f5c04a'}, px:["....r....","...rrr...","..rrrrr..",".rrrrrrr.","rrrrrrrrr",".wwwwwww.",".ww.y.ww.",".ww.y.ww.",".wwwwwww."]},
   city:{pal:{b:'#7f77dd', y:'#f5c04a'}, px:["bbbbbbbbb","bybybybyb","bbbbbbbbb","bybybybyb","bbbbbbbbb","bybybybyb","bbbbbbbbb","bbbbybbbb","bbbbybbbb"]},
@@ -698,7 +707,7 @@ const LV_PLAY_LINES=['עוד פעם? טוב','אני אעשה אווירון. ש
 const LV_FILM_LINES=['תגידי שלום למצלמה!','עוד סרטון אחד!',"צ'ופוני, תעשי פרצוף!"];
 const LV_TAKE_LINES=['יותם, תביא את הטלפון','מספיק סרטונים'];
 const CH4_OVER=[["yotam","אמא, צ'ופה מנצחת. לאאאא!"],["chupa","אמא, ברח לי קצת פיפי"],["nitzan","אני צריך לסגור משהו מול המחשב רבע שעה וחוזר"]];
-const CH4={id:'living', mode:'living', title:'פרק 4 · הסלון', sub:'אין לי כוחות. יש לי ילדים', open:true,
+const CH4={id:'living', mode:'living', title:'פרק 4 · הסלון', sub:'אין לי כוחות. יש לי ילדים', open:false, unlockAfter:'city',
    introScene:['yotam','yael','chupa'], winScene:['yael','nitzan'], goal:'להחזיק מעמד עד האמבטיה', yaelIntro:'home_idle', yaelWin:'home_done', yaelOver:'home_fail',
    intro:[['yael','הגעתי. עכשיו בבגדי בית. אני לא יוצאת יותר היום'],['yotam','אמא! בואי תשחקי איתי בלגו!'],['chupa','אמא! אמא! אמאאא!'],['yael','אין לי כוחות'],['yotam','אמא! רוצה לעבור איתי על החוברת לגו?'],['yael','אוי אלוהים'],['chupa','אמא! בא לי משחק הזיכרון'],['yotam','אמא, את יודעת לאיזה גילאים הלגואים בעמוד הזה? אני אגיד לך'],['yael','...'],['nitzan','אני צריך לסיים משהו ללקוח, את מסתדרת?'],['yael','$%%^%₪$!!!!']], /* Nitzan, 24.11.2026 */
    rules:`<li class="pic"><img src="assets/ui_rule_tap.png" alt=""><span>לחצי על ילד כדי לשחק איתו. כל לחיצה מעלה את המד שלו. לחיצות מהירות על אותו ילד לא עוזרות: עברי בין הילדים.</span></li><li class="pic"><img src="assets/ui_rule_warn.png" alt=""><span>המדים יורדים כל הזמן, ויותר מהר ככל שהערב מתקדם. מד ריק = הילד צועק. יש לך 3 שניות ללחוץ עליו, אחרת מתחיל ריב.</span></li><li class="pic"><img src="assets/ui_rule_fight.png" alt=""><span>שני מדים באדום ביחד = ריב מיד. ריב = <b>פסילה.</b></span></li><li class="pic"><img src="assets/ui_rule_film.png" alt=""><span>יותם מצלם את צ'ופה? לחצי עליו כדי לקחת את הטלפון. אבל הוא יתבאס.</span></li><li class="pic"><img src="assets/ui_rule_star.png" alt=""><span>כל עשר שניות בלי ריב = כוכב. 3 פסילות – והפרק מתחיל מההתחלה.</span></li>`,
@@ -1558,10 +1567,10 @@ function drawNight(){
 }
 // the end of the map: Nitzan's personal message (opens after chapter 7)
 function ntMapFinal(list){
-  const ni=CHAPTERS.findIndex(c=>c.id==='night'); const open=(ni>=0 && state.done.includes(ni)) || TEST_OPEN.final;
+  const ni=CHAPTERS.findIndex(c=>c.id==='night'); const open=(ni>=0 && state.done.includes(ni)) || TEST_OPEN.final || CHEAT;
   const el=document.createElement('div'); el.className='chapter'+(open?'':' locked');
-  const ic=document.createElement('div'); ic.className='icon'; const im=new Image(); im.src='assets/nitzan_portrait.png'; im.style.cssText='width:44px;height:44px;image-rendering:pixelated;border-radius:4px'; ic.appendChild(im);
-  const tx=document.createElement('div'); tx.innerHTML='<div class="t">הסוף · ניצן</div><div class="s">הודעה אישית ליעל</div>';
+  const ic=document.createElement('div'); ic.className='icon'; ic.appendChild(spriteCanvas(SKULL_ICON.px, SKULL_ICON.pal, 4)); /* 25.11.2026, Nitzan: skull icon, title only */
+  const tx=document.createElement('div'); tx.innerHTML='<div class="t">הסוף</div>';
   const tag=document.createElement('div'); tag.className='tag'; tag.textContent = TEST_OPEN.final ? 'בדיקה' : open ? 'פתוח' : 'נעול';
   el.append(ic,tx,tag);
   if(open) el.onclick=showFinal; else el.onclick=()=>{ TEST_TAPS.final=(TEST_TAPS.final||0)+1; if(TEST_TAPS.final>=5){ TEST_OPEN.final=true; renderMap(); } };
@@ -1602,7 +1611,7 @@ const CHAPTERS = [
    over:[["nitzan","הנעליים בסלון. שוב"],["yotam","אמא, שכחת את המשקפיים!"],["chupa","אמא! אמא! אמאאא! בא לי את אמא!"],["dganit","איפה את? אני מחכה בתחנה ואת לא באה"]],
    retry:'נסי שוב מתחילת הפרק',
    doneTitle:'פרק 1 הושלם', doneText:'יעל יצאה מהבית. בחושך. עם משקפיים.', next:'הבא: פרק 2 · האוטובוס לעבודה.'},
-  {id:'bus', mode:'bus', title:'פרק 2 · האוטובוס לעבודה', sub:'עוד חושך. עוד פקק. עוד אנשים', open:true,
+  {id:'bus', mode:'bus', title:'פרק 2 · האוטובוס לעבודה', sub:'עוד חושך. עוד פקק. עוד אנשים', open:false, unlockAfter:'home',
    introScene:['yael'], winScene:['yael'], goal:'להגיע לעירייה בלי שיחפרו לך',
    intro:[
     ['yael','שש בבוקר. חושך מצריים. ואני בתחנה'],['nitzan','לקחת משקפיים?'],['yael','כן'],['nitzan','טלפון?'],
@@ -1615,7 +1624,7 @@ const CHAPTERS = [
    over:[["dganit","אני מבינה שקפה כבר לא נשתה ביחד היום"],["nitzan","דיברת עם זרים, נכון?"],["eti","יעלי, תרדי בתחנה הבאה ותיקחי מונית. אני משלמת"],["yotam","אמא, למה את עוד באוטובוס?"],["driver","הדרך חסומה גברת, רדי פה ובהצלחה בהמשך"]],
    retry:'נסי שוב מהתחנה',
    doneTitle:'פרק 2 הושלם', doneText:'יעל הגיעה לעירייה. בלי גויאבה. עם כל הכוחות שלא היו לה.', next:'הבא: פרק 3 · עיריית תל אביב. זמן קפה. ברצינות.'},
-  {id:'city', mode:'coffee', title:'פרק 3 · עיריית תל אביב', sub:'זמן קפה. ברצינות', open:true,
+  {id:'city', mode:'coffee', title:'פרק 3 · עיריית תל אביב', sub:'זמן קפה. ברצינות', open:false, unlockAfter:'bus',
    introScene:['yael'], winScene:['yael'], goal:'לסיים את הקפה כשהוא עדיין חם',
    intro:[
     ['dganit','הו! בוקר טוב. בדיוק הכנתי לך קפה. הוא על השולחן. חם'],['yael','כמה חם?'],['dganit','כמו טיול בישראל עם הילדים בסוף אוגוסט'],['yael','אל תדברי איתי עד שאני מסיימת'],
@@ -1643,7 +1652,9 @@ function renderHud(){
   $('coins').textContent = (state.coins + state.chapterCoins) + ' ⭐';
 }
 const TEST_OPEN={}, TEST_TAPS={};
-function chOpen(ch){ if(ch.open) return true; if(TEST_OPEN[ch.id]) return true; if(ch.unlockAfter){ const j=CHAPTERS.findIndex(c=>c.id===ch.unlockAfter); return j>=0 && state.done.includes(j); } return false; }
+/* 25.11.2026, Nitzan: secret code opens every chapter (only he knows it). Typed with a Hebrew keyboard it also works. */
+const CHEAT_CODES=['chupa','ביופש']; let CHEAT=false; try{ CHEAT=localStorage.getItem('yael-cheat')==='1'; }catch(e){}
+function chOpen(ch){ if(ch.open || CHEAT) return true; if(TEST_OPEN[ch.id]) return true; if(ch.unlockAfter){ const j=CHAPTERS.findIndex(c=>c.id===ch.unlockAfter); return j>=0 && state.done.includes(j); } return false; }
 function renderMap(){
   const list=$('mapList'); list.innerHTML='';
   CHAPTERS.forEach((ch,i)=>{
@@ -1698,6 +1709,10 @@ function showRules(){
   show('s-rules');
 }
 $('btnPlay').onclick=()=>{ sndUnlock(); startPlay(); };
+$('cheatLink').onclick=e=>{ e.preventDefault(); const f=$('cheatForm'); f.hidden=!f.hidden; $('cheatMsg').textContent=''; if(!f.hidden){ $('cheatIn').value=''; $('cheatIn').focus(); } };
+$('cheatForm').onsubmit=e=>{ e.preventDefault(); const v=$('cheatIn').value.trim().toLowerCase();
+  if(CHEAT_CODES.includes(v)){ CHEAT=true; try{ localStorage.setItem('yael-cheat','1'); }catch(err){} $('cheatForm').hidden=true; renderMap(); $('cheatMsg').textContent='כל הפרקים פתוחים'; }
+  else { $('cheatMsg').textContent='קוד שגוי'; $('cheatIn').select(); } };
 $('btnStart').onclick=()=>{ sndUnlock(); renderMap(); show('s-map'); };
 $('btnRetry').onclick=()=>{ sndUnlock(); state.hearts=3; state.chapterCoins=0; renderHud(); startPlay(); };
 $('btnOverMap').onclick=()=>{ musicStop(); renderMap(); show('s-map'); };
