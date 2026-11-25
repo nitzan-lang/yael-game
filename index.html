@@ -1577,7 +1577,8 @@ function ntMapFinal(list){
   const tx=document.createElement('div'); tx.innerHTML='<div class="t">הסוף</div>';
   const tag=document.createElement('div'); tag.className='tag'; tag.textContent = TEST_OPEN.final ? 'בדיקה' : open ? 'פתוח' : 'נעול';
   el.append(ic,tx,tag);
-  if(open) el.onclick=showFinal; else el.onclick=()=>{ TEST_TAPS.final=(TEST_TAPS.final||0)+1; if(TEST_TAPS.final>=5){ TEST_OPEN.final=true; renderMap(); } };
+  if(open){ el.onclick=showFinal; const fi=document.getElementById('finalImg'); if(fi && fi.decode) fi.decode().catch(()=>{}); } /* prepare the photo early */
+  else el.onclick=()=>{ TEST_TAPS.final=(TEST_TAPS.final||0)+1; if(TEST_TAPS.final>=5){ TEST_OPEN.final=true; renderMap(); } };
   list.appendChild(el);
 }
 function finalFit(){ /* font size from the photo width; then shrink until the full letter fits the box (fonts differ between phones) */
@@ -1593,6 +1594,14 @@ function showFinal(){
   const F=FINAL_MSG, box=document.getElementById('finalText'); box.innerHTML='';
   const a=document.createElement('span'), b=document.createElement('span'), c=document.createElement('span'); b.className='reveal'; box.append(a,b,c);
   show('s-final'); finalFit();
+  /* 25.11.2026, Nitzan: on his phone the photo appeared only late in the letter. Start typing only after the photo is ready (max 5 s wait) */
+  const img=document.getElementById('finalImg'); let started=false; const run=++finalRun;
+  const go=()=>{ if(started || run!==finalRun || !document.getElementById('s-final').classList.contains('on')) return; started=true; finalFit(); finalType(F,a,b,c); };
+  const ready = img.complete && img.naturalWidth ? (img.decode ? img.decode() : Promise.resolve()) : new Promise(r=>{ img.addEventListener('load',r,{once:true}); img.addEventListener('error',r,{once:true}); }).then(()=>img.decode ? img.decode() : null);
+  Promise.resolve(ready).catch(()=>{}).then(go); finalTimers.push(setTimeout(go,5000));
+}
+let finalRun=0;
+function finalType(F,a,b,c){
   if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ a.textContent=F.parts[0]; b.textContent=F.parts[1]; c.textContent=F.parts[2]; return; }
   const at=(ms,fn)=>finalTimers.push(setTimeout(fn,ms));
   const type=(el,txt,t0)=>{ const ch=Array.from(txt); ch.forEach((_,i)=>at(t0+i*F.letterMs,()=>{ el.textContent=ch.slice(0,i+1).join(''); })); return t0+ch.length*F.letterMs; }; /* Array.from keeps the emoji in one piece */
