@@ -1859,7 +1859,7 @@ const BOSS={ x:200, y:160, r:55, /* boss center and body radius on screen (pack:
   hitDmg:18, sleepSec:2.5, wakeSafe:0.7, /* a hit drains hitDmg over the 2.5 s of sleep */
   lanes:{ low:286, high:236 }, arrowW:54, arrowH:11, /* pack collision rect [12,22,104,20] x 0.55 */ arrowS:0.55, arrowHitW:22, popS:0.55, angelS:0.42, arrowFromX:294, arrowSpeed:[130,142,155], /* arrows fly in from the right edge, under the boss (was from x 140 at 100-126: too close to Yael, Nitzan 27.11.2026) */
   gaps:[[1.98,2.61],[1.62,2.16],[1.3,1.8]], /* 10% shorter = about 10% more attacks (Nitzan, 27.11.2026) */ windup:0.7, /* was 0.55 */ parryZone:[-2,20], /* about 0.15 s: a jump a bit early stays a jump, only a really late tap is a block (27.11.2026) */ /* arrow's left edge minus Yael's right edge (86), in px */
-  duckSec:1.0, /* a swipe down keeps Yael down for 1 s (the runner uses 0.5): the arrows come from further away now (27.11.2026) */ wheelS:0.42, wheelSpeed:120, wheelFromX:178,
+  duckSec:1.0, /* a swipe down keeps Yael down for 1 s (the runner uses 0.5): the arrows come from further away now (27.11.2026) */ wheelS:0.42, wheelSpeed:135, wheelFromX:300, /* small wheels roll in from the right edge (was x 178 at 120: too close to Yael, Nitzan 27.11.2026) */
   angelAt:[0.68,0.32], angelSpeed:16, angelY:196, angelFrom:[118,80], /* starts left of the bigger boss (pack v2) */ angelDrop:40, angelStars:3, /* the angel floats down from the left of the boss toward Yael; a small jump touches it */
   winHold:1.5, winMsgSec:3.2, loseHold:1.3, retryAfter:1.6 };
 const BS_IMG={};
