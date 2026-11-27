@@ -178,7 +178,7 @@
 
   <!-- final message from Nitzan (after chapter 7) -->
   <section class="screen" id="s-final">
-    <div id="finalCard"><img id="finalImg" src="assets/final_photo_v2.jpg" alt=""><div id="finalCover"></div><div id="finalText"></div></div>
+    <div id="finalCard"><img id="finalImg" src="assets/final_photo_v3.jpg" alt=""><div id="finalCover"></div><div id="finalText"></div></div>
     <button id="btnFinalMap">למפה</button>
   </section>
 
@@ -1358,21 +1358,34 @@ const NT_GOOD_LINES=['יש!','עובד. אל תזוזו'];
 const FINAL_MSG={ title:'הודעה מניצן', parts:['כל הכבוד קטני, שרדת עוד יום בג׳ונגל הישראלי! הפרס שלך: את זוכה...', ' לתכנן את הנסיעה הבאה לחו״ל!', ' טוב שיש למה לצפות 😄. אה, ומזל טוב!\nאוהב,\nניצן'],
   startDelay:700, letterMs:55, beforeReveal:500, revealHold:2000 };
 let finalTimers=[];
-const CH7={id:'night', mode:'night', title:'פרק 7 · הערב', sub:'פרק אחד של סדרה (או רבע פרק) ונרדמים', open:false, unlockAfter:'stories',
+/* 27.11.2026, Nitzan asked: chapter 7 is split into two map items. 7a = persuading Nitzan (id 'night', so old saves stay valid), 7b = the runner + the ending (id 'night2'). */
+const CH7={id:'night', mode:'night', title:'פרק 7א · המטען', sub:'הסוללה נגמרת. המטען בסלון', open:false, unlockAfter:'stories',
    introScene:['nitzan','yael'], winScene:['yael','nitzan'], goal:'לשכנע את ניצן להביא את המטען', yaelIntro:'home_idle', yaelWin:'home_done', yaelOver:'home_fail',
    intro:[['yael','סוף סוף... סדרה'],['nitzan','מה רואים? די אס ארנוט?'],['yael','משהו צרפתי. נקרא ׳אתי׳. אמא שלי אומרת שזה טוב'],['nitzan','טוב, יאללה'],['yael','שנייה...'],['yael','בא לך להביא את המטען מהסלון?'],['nitzan','...']],
-   rules:`<li class="pic"><img src="assets/ui_rule_c7_charger.png" alt=""><span>שכנעי את ניצן להביא את המטען לפני שהסוללה נגמרת. בחרי את התשובה הנכונה. תשובה שגויה מחזירה אותו מתחת לשמיכה.</span></li><li class="pic"><img src="assets/ui_rule_c7_source.png" alt=""><span>הסדרה נתקעה? רק מקור הצפייה <b>Torrentio</b> עובד. בחרי מקור <b>באנגלית</b> (לא דיבוב), בלי <b>480p</b>, עם <b>כתוביות בעברית</b>.</span></li><li class="pic"><img src="assets/ui_rule_c7_bad.png" alt=""><span>מקור שלא עובד מעייף אותך.</span></li><li class="pic"><img src="assets/ui_rule_c7_wake.png" alt=""><span>העיניים נסגרות? <b>לחצי על יעל.</b></span></li><li class="pic"><img src="assets/ui_rule_c7_star.png" alt=""><span>כוכב: כל תשובה נכונה, וכל מקור שעובד.</span></li><li class="pic"><img src="assets/ui_rule_hearts.png" alt=""><span>נרדמת, או שהסוללה נגמרה? <b>פסילה.</b> 3 פסילות – והפרק מתחיל מההתחלה.</span></li>`,
+   rules:`<li class="pic"><img src="assets/ui_rule_c7_charger.png" alt=""><span>שכנעי את ניצן להביא את המטען לפני שהסוללה נגמרת. בחרי את התשובה הנכונה. תשובה שגויה מחזירה אותו מתחת לשמיכה.</span></li><li class="pic"><img src="assets/ui_rule_c7_wake.png" alt=""><span>העיניים נסגרות? <b>לחצי על יעל.</b></span></li><li class="pic"><img src="assets/ui_rule_star.png" alt=""><span>כוכב: כל תשובה נכונה.</span></li><li class="pic"><img src="assets/ui_rule_hearts.png" alt=""><span>נרדמת, או שהסוללה נגמרה? <b>פסילה.</b> 3 פסילות – והפרק מתחיל מההתחלה.</span></li>`,
+
+
    win:[], /* the ending is played inside the game screen (ntUpdateEnd) */
    over:[["nitzan","את מבזה את עצמך"]], retry:'נסי שוב מתחילת הפרק',
    /* 25.11.2026, Nitzan asked: the three-strikes line depends on the last strike. Battery = this line; falling asleep (stage A or B) = 'over' above */
    overFor:()=> (play.nt && play.nt.lastStrike==='battery') ? [["nitzan","אמרתי לך, תחברי לפני שאת הולכת לישון ותהיה לך סוללה ליום שלם!"]] : null,
-   doneTitle:'פרק 7 הושלם', doneText:'היום של יעל נגמר. כמעט.', next:'הבא: ההודעה של ניצן. היא מחכה בסוף המפה.'};
+   doneTitle:'פרק 7א הושלם', doneText:'יש מטען. עכשיו רק פרק אחד.', next:'הבא: פרק 7ב · פרק אחד.'};
+const CH7B={id:'night2', mode:'night', title:'פרק 7ב · פרק אחד', sub:'פרק אחד של סדרה (או רבע פרק) ונרדמים', open:false, unlockAfter:'night',
+   introScene:['nitzan','yael'], winScene:['yael','nitzan'], goal:'לתפוס 4 רבעי פרק', yaelIntro:'home_idle', yaelWin:'home_done', yaelOver:'home_fail',
+   intro:[['yael','יש מטען. עכשיו רק פרק אחד'],['nitzan','רבע פרק. אני מכיר אותך']], /* draft lines by Claude, 27.11.2026 */
+   rules:`<li class="pic"><img src="assets/ui_rule_c7_run.png" alt=""><span>יעל רצה בתוך הפרק. <b>לחצי כדי לקפוץ.</b> לחיצה ארוכה = קפיצה גבוהה. <b>החליקי למטה</b> כדי להתכופף.</span></li><li class="pic"><img src="assets/ui_rule_c7_coin.png" alt=""><span>תפסי 4 מטבעות <b>Torrentio</b> = פרק שלם.</span></li><li class="pic"><img src="assets/ui_rule_c7_obs.png" alt=""><span>דיבוב, 480p, כתוביות זרות, ׳טוען...׳ וחורים = <b>פסילה</b>.</span></li><li class="pic"><img src="assets/ui_rule_c7_coffee.png" alt=""><span>מד הערנות יורד כל הזמן. <b>אספי קפה</b> כדי למלא אותו.</span></li><li class="pic"><img src="assets/ui_rule_c7_star.png" alt=""><span>כוכב: כל רבע פרק, וכל שתי כוסות קפה.</span></li><li class="pic"><img src="assets/ui_rule_hearts.png" alt=""><span>נרדמת, או נתקעת במכשול? <b>פסילה.</b> 3 פסילות – והפרק מתחיל מההתחלה.</span></li>`,
+   win:[], /* the ending is played inside the game screen (ntUpdateEnd) */
+   over:[["nitzan","באתר סדרות זה לא היה קורה"]], retry:'נסי שוב מתחילת הפרק',
+   overFor:()=> (play.nt && play.nt.lastStrike==='asleep') ? [["nitzan","את מבזה את עצמך"]] : null, /* obstacle or hole = 'over' above */
+   doneTitle:'פרק 7ב הושלם', doneText:'היום של יעל נגמר. כמעט.', next:'הבא: ההודעה של ניצן. היא מחכה בסוף המפה.'};
+MAP_ICONS.night2=MAP_ICONS.night; /* same laptop icon */
 
 function initNight(){
   play.pose='idle';
   play.nt={ part:'A', step:0, q:shuffle([0,1,2]), qi:0, ask:null, nextAskAt:NT_ASK_BUBBLE.to, askBubble:true, battery:NIGHT.batteryStart,
     awake:1, lastTap:-9, rubT:0, sleepy:false, sleepLineAt:0, black:0, nPose:'hidden', dotsT:0, walk:null, fetch:null, anim:0, btnDown:-1, btnDownT:0,
     watched:0, playing:false, list:null, listN:0, nextFreezeAt:0, bIntroT:-1, bSaid:false, bad:null, end:null, endPose:'watch', fb:null, lineAt:0 };
+  if(cur().id==='night2'){ const N=play.nt; N.part='B'; N.nPose='sit'; N.askBubble=false; N.nextAskAt=1e9; rnStart(); } /* 7b: straight into the runner */
 }
 /* 25.11.2026, Nitzan asked: at the start of part A it was not clear what Nitzan should bring. Yael first asks in a speech bubble next to her head, and only then the first excuse card appears. */
 const NT_ASK_BUBBLE={ text:'מביא מטען?', from:0.3, to:2.6 };
@@ -1427,7 +1440,8 @@ function ntPick(i){
   updateGoal();
 }
 function nightDown(e){
-  if(!play||play.mode!=='night'||play.over||play.won) return; const N=play.nt; if(N.end||play.pause>0) return;
+  if(!play||play.mode!=='night'||play.over||play.won) return; const N=play.nt; if(N.end){ N.end.skip=true; return; } if(play.pause>0) return; /* a tap can skip the 7B ending card */
+  if(N.run) return rnDown(e);
   const p=l3pt(e);
   if(N.part==='A' && N.ask && p.y>=NIGHT.btnY-6){ ntAnswer(p.x>W/2 ? 0 : 1); return; } /* right button = first answer (RTL) */
   if(N.part==='B' && N.list){ for(let i=0;i<N.list.rows.length;i++){ if(inRect(p, ntRowRect(i))){ ntPick(i); return; } }
@@ -1438,6 +1452,7 @@ function ntStartB(){ const N=play.nt; N.part='B'; N.nPose='sit'; N.bIntroT=0; N.
 function ntStartEnd(){ const N=play.nt; N.end={t:0, step:0}; N.playing=false; N.list=null; N.bad=null; N.endPose='watch'; play.msg=null; N.sleepy=false; musicTempo(0.9); }
 function ntUpdateEnd(dt){
   const N=play.nt, E=N.end; E.t+=dt;
+  if(cur().id==='night2') return ntEnd7b(E); /* the new 7B ending, 27.11.2026 */
   const seq=[[0.4,()=>say('סיימנו פרק שלם', 1.2, 'yael')],[2.6,()=>say('עוד אחד?', 1.0, 'nitzan')],[4.4,()=>say('ברור', 0.8, 'yael')],
     [5.9,()=>{ N.endPose='asleep'; SFX.hide(); }],[6.9,()=>{ N.nPose='smile'; say('רבע פרק. כמו תמיד', 1.4, 'nitzan'); }],
     [9.3,()=>say('עכשיו אני אחזיק יותר זמ... ZZZZZZ', 1.5, 'yael')], /* Nitzan, 24.11.2026: Yael mumbles in her sleep */
@@ -1452,6 +1467,7 @@ function updateNight(dt){
   if(N.sleepLineAt && play.t>=N.sleepLineAt){ N.sleepLineAt=0; say('לא. אני נחה לשנייה', 1.2, 'yael'); }
   if(N.end){ ntUpdateEnd(dt); return; }
   if(play.pause>0){ play.pause-=dt; return; }
+  if(N.run){ rnUpdate(dt); updateGoal(); return; } /* part B is the runner since 27.11.2026 */
   // the awake meter goes down all the time, faster as the chapter goes on
   const k=Math.min(1, play.t/NIGHT.lengthRef); N.awake-=dt/(NIGHT.awakeStart+(NIGHT.awakeEnd-NIGHT.awakeStart)*k);
   if(N.awake<NIGHT.sleepyAt && !N.sleepy){ N.sleepy=true; SFX.pop(); musicTempo(0.86); }
@@ -1469,7 +1485,7 @@ function updateNight(dt){
       if(N.battery<=0){ N.battery=0; ntBatteryOut(); updateGoal(); return; }
       if(!N.ask && play.t>=N.nextAskAt) ntAsk(); }
   } else {
-    if(N.bIntroT>=0){ N.bIntroT+=dt; if(!N.bSaid && N.bIntroT>=2.3){ N.bSaid=true; say('נעלתי כשנכנסתי. אולי', 1.2, 'yael'); } if(N.bIntroT>=NIGHT.introB){ N.bIntroT=-1; ntOpenList(); } }
+    if(N.bIntroT>=0){ N.bIntroT+=dt; if(!N.bSaid && N.bIntroT>=2.3){ N.bSaid=true; say('נעלתי כשנכנסתי. אולי', 1.2, 'yael'); } if(N.bIntroT>=NIGHT.introB){ N.bIntroT=-1; if(cur().id==='night2') rnStart(); else { SFX.win(); winNow(); } } /* 7a ends here (27.11.2026) */ }
     else if(N.playing){ N.watched+=dt;
       if(N.watched>=NIGHT.watchNeed){ N.watched=NIGHT.watchNeed; ntStartEnd(); updateGoal(); return; }
       if(N.watched>=N.nextFreezeAt){ say('נתקע', 0.8, 'yael'); ntOpenList(); } }
@@ -1479,7 +1495,7 @@ function updateNight(dt){
 function ntYaelKey(){
   const N=play.nt, p=play.pose;
   if(N.end) return N.endPose;
-  if(p==='celebrate') return 'asleep_closed';
+  if(p==='celebrate') return cur().id==='night2' ? 'asleep_closed' : 'happy'; /* 7a ends happy, 7b ends asleep */
   if(play.poseT>0 && (p==='happy'||p==='annoyed'||p==='asleep')) return p;
   if(N.rubT>0) return 'rub';
   if(N.awake<NIGHT.sleepyAt) return 'sleepy';
@@ -1493,7 +1509,7 @@ function ntBtn(x, y, w, h, text, down){
   const lh=13, cy=y+(h-4)/2+(down?3:0); lines.forEach((l,i)=>ctx.fillText(l, x+w/2, cy-(lines.length-1)*lh/2+i*lh)); ctx.textBaseline='alphabetic';
 }
 function drawNight(){
-  const N=play.nt; ctx.imageSmoothingEnabled=false;
+  const N=play.nt; if(N.run) return rnDraw(); ctx.imageSmoothingEnabled=false;
   const bg=NT_IMG.bg_bedroom_270x360; if(bg.complete&&bg.naturalWidth) ctx.drawImage(bg,0,0,W,H); else { ctx.fillStyle='#2a1f3d'; ctx.fillRect(0,0,W,H); }
   // level 7 v2 pack (24.11.2026): one shared duvet is in the background. When Nitzan is 'low' or 'hidden', a full-canvas duvet overlay
   // is drawn BEFORE the characters. In-bed sprites: 256x256 at full size, top-left (-48,0) for Nitzan and (62,0) for Yael (handoff).
@@ -1578,11 +1594,13 @@ function drawNight(){
     const lb = N.list ? NIGHT.panel.y+NIGHT.panel.titleH+N.list.rows.length*(NIGHT.panel.rowH+NIGHT.panel.gap)+4 : 0;
     const fy = N.part==='A' ? 168 : Math.max(282, lb+fl.length*fs*0.58+6); ctx.translate(W/2, fy); ctx.scale(pop,pop); ctx.globalAlpha=a;
     ctx.lineJoin='round'; ctx.lineWidth=7; ctx.strokeStyle='#15112b'; ctx.fillStyle=N.fb.ok?'#5dcaa5':'#f06a6a'; fl.forEach((l,i)=>{ const ly=(i-(fl.length-1)/2)*fs*1.15; ctx.strokeText(l, 0, ly); ctx.fillText(l, 0, ly); }); ctx.restore(); ctx.textBaseline='alphabetic'; }
+  ntEndOverlay('lids');
   drawMsg();
+  ntEndOverlay('card');
 }
 // the end of the map: Nitzan's personal message (opens after chapter 7)
 function ntMapFinal(list){
-  const ni=CHAPTERS.findIndex(c=>c.id==='night'); const open=(ni>=0 && state.done.includes(ni)) || TEST_OPEN.final || CHEAT;
+  const ni=CHAPTERS.findIndex(c=>c.id==='night2'); /* the message opens after 7b */ const open=(ni>=0 && state.done.includes(ni)) || TEST_OPEN.final || CHEAT;
   const el=document.createElement('div'); el.className='chapter'+(open?'':' locked');
   const ic=document.createElement('div'); ic.className='icon'; ic.appendChild(spriteCanvas(SKULL_ICON.px, SKULL_ICON.pal, 4)); /* 25.11.2026, Nitzan: skull icon, title only */
   const tx=document.createElement('div'); tx.innerHTML='<div class="t">הסוף</div>';
@@ -1623,6 +1641,501 @@ function finalType(F,a,b,c){
   t+=F.revealHold; type(c, F.parts[2], t);
 }
 document.getElementById('btnFinalMap').onclick=()=>{ finalTimers.forEach(clearTimeout); finalTimers=[]; renderMap(); show('s-map'); };
+
+/* ---------- chapter 7, part B: "one episode" runner (27.11.2026) ----------
+   Nitzan asked for an arcade part B in the style of Wonder Boy instead of the source list. Graphics: yael-game-ch7b-runner-v1.zip (assets/ch7b/).
+   Yael runs to the right by herself. Tap = jump (hold = higher), swipe down = duck. 4 green Torrentio coins = 4 quarters of the episode.
+   Streaming problems are obstacles (touch = strike). An awake meter drains; coffee fills it. Numbers are Claude's first suggestion (approved to try). */
+const RUN={ groundY:300, yaelX:70, ys:0.5,
+  speeds:[110,125,140,155], quarterSec:7.6, /* seconds of running before the quarter's coin comes (11 -> 9.5, about 15% easier; 9.5 -> 7.6 = 20% fewer obstacles before the boss, Nitzan 27.11.2026) */
+  gaps:[[1.6,2.2],[1.45,1.95],[1.25,1.75],[1.15,1.55]], /* seconds between obstacles (+15%, Nitzan 27.11.2026) */
+  pools:[['dub','buffer'],['dub','buffer','480p'],['dub','buffer','480p','subs','hole'],['dub','buffer','480p','subs','hole','sheker']],
+  gravity:1100, jumpV:520, cutV:210, /* full jump about 123 px high, 0.95 s in the air; a short tap about 45-65 px */ duckMin:0.5, swipeDy:18, swipeWindow:0.18,
+  coinY:198, coinMissDelay:3.5, awakeSec:23, /* 20 -> 23 s (+15%) */ coffeeGain:0.25, coffeeEvery:[3.8,5.0], coffeeStars:2, strikeHold:1.6, resetAwake:0.6,
+  doneHold:1.8, hintSec:3.5, darkFrom:3 /* index of the quarter that gets dark at the edges */ };
+const RN_SUB_LANGS=['סלובקית','אוזבקית','אוסטרית'];
+const RN_IMG={}; for(const k of ['bg_stream_far_270x360','bg_stream_mid_540x240','ground_timeline_tile_64x60','ground_gap_left_32x60','ground_gap_right_32x60',
+  'yael_run_a','yael_run_b','yael_run_c','yael_run_d','yael_jump','yael_duck','yael_hit','yael_asleep_fall','yael_quarter',
+  'obs_dub_a','obs_dub_b','obs_480p','obs_subs_a','obs_subs_b','obs_buffer_a','obs_buffer_b','obs_sheker','item_torrentio_a','item_torrentio_b','fx_quarter_burst','fx_hit_puff']){ const im=new Image(); im.src=`assets/ch7b/${k}.png`; RN_IMG[k]=im; }
+for(const k of ['item_glass_full','fx_sparkle_a','fx_sparkle_b']){ const im=new Image(); im.src=`assets/${k}.png`; RN_IMG[k]=im; }
+/* obstacle data: scale, collision hint [x,y,w,h] in the 128 frame (from the pack manifest), extra speed toward Yael, label, reason after a hit */
+const RN_OBS={
+  dub:   { s:0.5,  hint:[22,43,61,77], extra:21, /* extra speeds -15% (27.11.2026) */ label:'דיבוב לרוסית', reason:()=>NT_FLAW_TEXT.dub },
+  '480p':{ s:0.62, /* the pack suggests 0.75; at 0.62 the high jump clears it from speed 110 (checked by hand) */ hint:[19,30,90,90], extra:0,  label:'480p', reason:()=>NT_FLAW_TEXT.cam },
+  buffer:{ s:0.55, hint:[26,34,76,80], extra:38, label:'טוען...', /* was 'באפרינג' (Nitzan, 27.11.2026) */ reason:()=>'טוען... טוען... טוען...' },
+  sheker:{ s:0.6,  hint:[28,30,72,90], extra:0,  label:'מקור מזויף', reason:()=>NT_FLAW_TEXT.src },
+  subs:  { s:0.65, hint:[21,49,86,31], extra:25, label:'', reason:(e)=>'כתוביות ב'+e.lang, fly:true, cy:228 } };
+
+function rnStart(){
+  const N=play.nt; N.list=null; N.playing=false; N.bad=null; play.msg=null;
+  N.run={ q:0, got:0, t:0, qt:0, speed:0, farOff:0, midOff:0, floorOff:0, ents:[], fx:[], nextObs:1.6, nextCoffee:2.2, coinAt:RUN.quarterSec, coinOut:false,
+    footY:RUN.groundY, vy:0, onGround:true, hold:false, duckT:0, jumpT:-9, ptr:null, anim:0, coffees:0, hitPose:null, reset:false, done:0, introT:0, keyJump:false, poseQ:0 };
+  N.awake=1; musicTempo(1.2); rnListen(); updateGoal();
+}
+/* pointer move / up are not routed to chapter 7 by the main code, so the runner adds its own listeners once */
+let rnListening=false;
+function rnListen(){ if(rnListening) return; rnListening=true;
+  cv.addEventListener('pointermove', e=>{ const R=rnLive(); if(!R||!R.ptr) return; const p=l3pt(e); if(p.y-R.ptr.y>RUN.swipeDy) rnDuck(); });
+  const up=()=>{ const R=rnLive(); if(!R) return; R.ptr=null; rnRelease(); };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('lostpointercapture', up); }
+function rnLive(){ return (play && play.mode==='night' && play.nt && play.nt.run && !play.over && !play.won) ? play.nt.run : null; }
+function rnDown(e){ const R=play.nt.run; if(R.boss) return bsDown(e); /* boss fight, 27.11.2026 */ if(R.done || R.reset) return; const p=l3pt(e); R.ptr={x:p.x, y:p.y, t:R.t}; rnJump(); }
+function rnJump(){ const R=play.nt.run; if(R.boss && (R.boss.phase!=='fight' || R.boss.sleepT>0)) return; R.hold=true; R.wantDuck=false; if(!R.onGround || R.duckT>0) return; R.vy=-RUN.jumpV; R.onGround=false; R.jumpT=R.t; SFX.flip(); }
+function rnRelease(){ const R=play.nt.run; R.hold=false; if(R.vy < -RUN.cutV) R.vy=-RUN.cutV; /* short tap = small jump */ }
+function rnDuck(){ const R=play.nt.run; if(R.boss && (R.boss.phase!=='fight' || R.boss.sleepT>0)) return; if(R.duckT>0) return;
+  if(!R.onGround && R.t-R.jumpT<RUN.swipeWindow && R.footY>RUN.groundY-30){ R.footY=RUN.groundY; R.vy=0; R.onGround=true; } /* the swipe started with a tiny hop: cancel it */
+  if(!R.onGround){ R.vy=Math.max(R.vy, 380); R.wantDuck=true; return; } /* in the air: swipe down = drop faster, and duck on landing (27.11.2026) */
+  R.duckT = R.boss ? BOSS.duckSec : RUN.duckMin; SFX.puff(); }
+
+function rnYaelRect(R){ const f=R.footY, d=R.duckT>0;
+  return d ? {x:62, y:f-50, w:24, h:48} : {x:62, y:f-80, w:24, h:76}; }
+function rnObsRect(e){ const o=RN_OBS[e.k], s=o.s, [hx,hy,hw,hh]=o.hint, sh=3;
+  const x0 = e.x-64*s, y0 = o.fly ? e.y-64*s : RUN.groundY-120*s;
+  return {x:x0+hx*s+sh, y:y0+hy*s+sh, w:hw*s-2*sh, h:hh*s-2*sh}; }
+function rnHit(a,b){ return a.x<b.x+b.w && a.x+a.w>b.x && a.y<b.y+b.h && a.y+a.h>b.y; }
+
+function rnSpawnObs(R){
+  const pool=RUN.pools[R.q], k=pool[Math.floor(Math.random()*pool.length)], x=W+50;
+  if(k==='hole'||k==='sheker'){ const w = R.q>=3 ? 60 : 52; R.ents.push({k:'hole', x:x, w:w});
+    if(k==='sheker'){ R.ents.push({k:'sheker', x:x+w+170, t:0, label:RN_OBS.sheker.label}); return w+170+40; } /* the fake source stands after the hole, with room to land */
+    return w; } /* returns how much extra room this group takes, so the next obstacle comes after it */
+  const e={k, x, t:Math.random(), label:RN_OBS[k].label};
+  if(k==='subs'){ e.lang=RN_SUB_LANGS[Math.floor(Math.random()*RN_SUB_LANGS.length)]; e.label='כתוביות ב'+e.lang; e.y=RN_OBS.subs.cy; }
+  R.ents.push(e); return 0;
+}
+function rnUpdate(dt){
+  const N=play.nt, R=N.run; R.t+=dt; R.anim+=dt; R.introT+=dt;
+  if(R.boss) return bsUpdate(dt); /* after the 4th coin: the boss fight (27.11.2026) */
+  for(const f of R.fx) f.t-=dt; R.fx=R.fx.filter(f=>f.t>0);
+  if(R.done){ R.done-=dt; if(R.done<=0){ bsStart(R); } return; } /* was: straight to the bedroom ending; now the boss comes first */
+  if(R.reset){ R.reset=false; rnResetQuarter(R); }
+  if(R.poseQ>0) R.poseQ-=dt;
+  // desktop keys: space / arrow up = jump (hold = higher), arrow down = duck
+  const kj=!!(play.keys[' ']||play.keys['ArrowUp']); if(kj && !R.keyJump) rnJump(); if(!kj && R.keyJump) rnRelease(); R.keyJump=kj;
+  if(play.keys['ArrowDown']) rnDuck();
+  // speed: ramps up at the start of each try of the quarter
+  const target=RUN.speeds[R.q]; R.speed=Math.min(target, R.speed+target*dt/1.2); const v=R.inHole?0:R.speed; /* the world stops while she falls into a broken file */
+  R.qt+=dt; R.farOff=(R.farOff+v*0.08*dt)%270; R.midOff=(R.midOff+v*0.35*dt)%540; R.floorOff=(R.floorOff+v*dt)%64;
+  // Yael: gravity, hold for a higher jump, duck timer
+  if(R.duckT>0){ R.duckT-=dt; if(R.duckT<=0 && (R.ptr || play.keys['ArrowDown'])) R.duckT=0.05; } /* keep ducking while the finger (or the down key) stays down; the key part fixes a one-frame gap, 27.11.2026 */
+  if(!R.onGround){ R.vy+=RUN.gravity*dt; R.footY+=R.vy*dt;
+    const overHole=R.ents.some(e=>e.k==='hole' && RUN.yaelX>e.x+6 && RUN.yaelX<e.x+e.w-6);
+    if(overHole && R.footY>RUN.groundY+2) R.inHole=true; /* once she is below the floor she cannot climb out (Nitzan, 27.11.2026: a broken file = a strike, not a stumble) */
+    if(R.footY>=RUN.groundY && !overHole && !R.inHole && R.vy>0){ R.footY=RUN.groundY; R.vy=0; R.onGround=true; if(R.wantDuck){ R.wantDuck=false; rnDuck(); } } }
+  else if(R.ents.some(e=>e.k==='hole' && RUN.yaelX>e.x+6 && RUN.yaelX<e.x+e.w-6)){ R.onGround=false; R.vy=60; } /* walked into a hole: she falls */
+  if(R.footY>RUN.groundY+70 || (R.inHole && R.footY>RUN.groundY+45)) return rnStrike(R, 'hole');
+  // move the world
+  for(const e of R.ents){ e.x-=(v+((RN_OBS[e.k]&&RN_OBS[e.k].extra)||0))*dt; if(e.t!==undefined) e.t+=dt; }
+  R.ents=R.ents.filter(e=>{ const right = e.k==='hole' ? e.x+e.w : e.x+40; if(right<-40){ if(e.k==='coin' && !e.got){ R.coinOut=false; R.coinAt=R.qt+RUN.coinMissDelay; } return false; } return true; });
+  // spawns: obstacles, the quarter coin (in a quiet spot), coffee between obstacles
+  R.nextObs-=dt; R.nextCoffee-=dt;
+  const coinRoom=!R.ents.some(e=>e.k!=='coffee' && (e.k==='hole' ? e.x+e.w+60 : e.x+70) > W-20); /* nothing right before the coin */
+  if(!R.coinOut && R.qt>=R.coinAt && R.nextObs>0.55 && coinRoom){ R.ents.push({k:'coin', x:W+40, y:RUN.coinY, t:0}); R.coinOut=true; R.nextObs=Math.max(R.nextObs, 1.0); }
+  else if(R.nextObs<=0){ const extra=rnSpawnObs(R); const g=RUN.gaps[R.q]; R.nextObs=g[0]+Math.random()*(g[1]-g[0])+extra/Math.max(60,v); }
+  if(R.nextCoffee<=0){ const clear=!R.ents.some(e=>e.k!=='coffee' && Math.abs((e.k==='hole'?e.x+e.w/2:e.x)-(W+30))<70);
+    if(clear){ R.ents.push({k:'coffee', x:W+30}); R.nextCoffee=RUN.coffeeEvery[0]+Math.random()*(RUN.coffeeEvery[1]-RUN.coffeeEvery[0]); } else R.nextCoffee=0.25; }
+  // the awake meter
+  N.awake-=dt/RUN.awakeSec;
+  if(N.awake<=0){ N.awake=0; return rnStrike(R, 'asleep'); }
+  // collisions
+  const Y=rnYaelRect(R);
+  for(const e of R.ents){
+    if(e.k==='coin' && !e.got){ const c={x:e.x-15, y:e.y-15, w:30, h:30}; if(rnHit(Y,c)) rnCoin(R,e); }
+    else if(e.k==='coffee' && !e.got){ const c={x:e.x-9, y:RUN.groundY-30, w:18, h:30}; if(rnHit(Y,c)){ e.got=true; N.awake=Math.min(1,N.awake+RUN.coffeeGain); R.coffees++; SFX.sip();
+        R.fx.push({k:'sparkle', x:e.x, y:RUN.groundY-24, t:0.4, T:0.4}); if(R.coffees%RUN.coffeeStars===0){ state.chapterCoins++; renderHud(); } } }
+    else if(RN_OBS[e.k] && rnHit(Y, rnObsRect(e))) return rnStrike(R, e.k, e);
+  }
+}
+function rnCoin(R,e){ const N=play.nt; e.got=true; R.got++; R.coinOut=false; state.chapterCoins++; renderHud(); SFX.ting();
+  R.fx.push({k:'burst', x:e.x, y:e.y, t:0.3, T:0.3}); R.ents=R.ents.filter(x=>x!==e);
+  ntFb(true, R.got>=4 ? 'פרק שלם!' : 'רבע פרק!');
+  if(R.got>=4){ R.done=RUN.doneHold; R.hitPose='quarter'; SFX.win(); updateGoal(); return; }
+  if(!play.msg && Math.random()<0.6) say(NT_GOOD_LINES[Math.floor(Math.random()*NT_GOOD_LINES.length)], 0.8, 'yael');
+  R.q=Math.min(3,R.got); R.qt=0; R.coinAt=RUN.quarterSec; musicTempo(1.2+0.08*R.q); R.poseQ=0.5; updateGoal(); }
+function rnStrike(R, kind, e){
+  const N=play.nt; R.vy=0; R.duckT=0; R.ptr=null; R.hold=false;
+  if(kind==='asleep'){ R.hitPose='asleep'; N.lastStrike='asleep'; SFX.hide(); strike('את ישנה?', 1.0, 'nitzan', RUN.strikeHold); N.sleepLineAt=play.t+1.0; }
+  else { R.hitPose='hit'; N.lastStrike='stream'; SFX.wrong(); R.fx.push({k:'puff', x:RUN.yaelX+16, y:Math.min(R.footY,RUN.groundY)-40, t:0.25, T:0.25});
+    ntFb(false, kind==='hole' ? 'קובץ שבור' : RN_OBS[kind].reason(e)); strike('אוף', 0.9, 'yael', RUN.strikeHold); }
+  R.reset=true; /* back to the start of this quarter after the pause; coins already caught stay */
+}
+function rnResetQuarter(R){ const N=play.nt;
+  R.ents=[]; R.fx=[]; R.footY=RUN.groundY; R.vy=0; R.onGround=true; R.inHole=false; R.duckT=0; R.hitPose=null; R.speed=RUN.speeds[R.q]*0.4;
+  R.qt=0; R.coinAt=RUN.quarterSec; R.coinOut=false; R.nextObs=1.4; R.nextCoffee=2.0; N.awake=Math.max(N.awake, RUN.resetAwake); updateGoal(); }
+
+function rnPoseKey(R){
+  if(R.hitPose==='quarter' || (R.poseQ>0)) return 'yael_quarter';
+  if(R.hitPose==='asleep') return 'yael_asleep_fall';
+  if(R.hitPose==='hit') return 'yael_hit';
+  if(!R.onGround) return 'yael_jump';
+  if(R.duckT>0) return 'yael_duck';
+  const fm=0.11*RUN.speeds[0]/Math.max(60,R.speed); return 'yael_run_'+'abcd'[Math.floor(R.anim/fm)%4];
+}
+function rnLabel(text, x, y, good){
+  ctx.font='bold 10px Heebo, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl'; ctx.textBaseline='middle';
+  const w=Math.ceil(ctx.measureText(text).width)+12, h=16; let lx=Math.max(3, Math.min(W-3-w, x-w/2)); const ly=Math.max(62, y-h);
+  ctx.fillStyle='#15112b'; ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(lx+0.5, ly+0.5, w, h, 3); else ctx.rect(lx+0.5, ly+0.5, w, h); ctx.fill();
+  ctx.strokeStyle = good ? '#5dcaa5' : '#f5c04a'; ctx.lineWidth=1; ctx.stroke(); ctx.fillStyle = good ? '#5dcaa5' : '#f5c04a'; ctx.fillText(text, lx+w/2+0.5, ly+h/2+1); ctx.textBaseline='alphabetic';
+}
+function rnImg(k, x, y, w, h){ const im=RN_IMG[k]; if(im&&im.complete&&im.naturalWidth) ctx.drawImage(im, Math.round(x), Math.round(y), w, h); }
+function rnDraw(){
+  const N=play.nt, R=N.run, gy=RUN.groundY;
+  if(R.boss) return bsDraw();
+  // 1. far layer (static, a very slow drift), 2. mid layer (repeats every 540), 3. the timeline floor (repeats every 64)
+  ctx.imageSmoothingEnabled=false; rnImg('bg_stream_far_270x360', 0, 0, W, H);
+  const mo=Math.floor(R.midOff); rnImg('bg_stream_mid_540x240', -mo, 60, 540, 240); rnImg('bg_stream_mid_540x240', -mo+540, 60, 540, 240);
+  const fo=Math.floor(R.floorOff); for(let x=-fo; x<W; x+=64) rnImg('ground_timeline_tile_64x60', x, gy, 64, 60);
+  // holes: show the far layer through the floor, and the broken edges on both banks
+  for(const e of R.ents) if(e.k==='hole'){ const far=RN_IMG.bg_stream_far_270x360, hx=Math.round(e.x);
+    if(far.complete&&far.naturalWidth){ const sx=Math.max(0,hx), ex=Math.min(W,hx+e.w); if(ex>sx) ctx.drawImage(far, sx, gy, ex-sx, 60, sx, gy, ex-sx, 60); }
+    rnImg('ground_gap_left_32x60', hx-32, gy, 32, 60); rnImg('ground_gap_right_32x60', hx+e.w, gy, 32, 60); }
+  ctx.imageSmoothingEnabled=true;
+  // items and obstacles
+  for(const e of R.ents){
+    if(e.k==='coffee' && !e.got){ const s=0.15; rnImg('item_glass_full', e.x-128*s, gy-240*s, 256*s, 256*s); }
+    else if(e.k==='coin'){ const s=0.5, fr=Math.floor(e.t/0.45)%2?'b':'a', bob=Math.sin(e.t*3)*3; rnImg('item_torrentio_'+fr, e.x-64*s, e.y-64*s+bob, 128*s, 128*s); }
+    else if(RN_OBS[e.k]){ const o=RN_OBS[e.k], s=o.s; let k='obs_'+e.k;
+      if(e.k==='dub') k+= Math.floor(e.t/0.15)%2?'_b':'_a'; else if(e.k==='buffer') k+= Math.floor(e.t/0.09)%2?'_b':'_a'; else if(e.k==='subs') k+= Math.floor(e.t/0.18)%2?'_b':'_a';
+      const top = o.fly ? e.y-64*s : gy-120*s; rnImg(k, e.x-64*s, top, 128*s, 128*s); }
+  }
+  // Yael (256 frame at 0.5, feet on footY)
+  const yk=rnPoseKey(R), hole=R.inHole && R.ents.find(e=>e.k==='hole' && RUN.yaelX>e.x && RUN.yaelX<e.x+e.w);
+  if(hole){ ctx.save(); ctx.beginPath(); ctx.rect(0,0,W,gy); ctx.rect(hole.x, gy, hole.w, 60); ctx.clip(); } /* falling into the hole: hide what is under the floor */
+  rnImg(yk, RUN.yaelX-128*RUN.ys, Math.min(R.footY, gy+60)-240*RUN.ys, 256*RUN.ys, 256*RUN.ys);
+  if(hole) ctx.restore();
+  // effects
+  for(const f of R.fx){ const a=Math.max(0,f.t/f.T); ctx.globalAlpha=a;
+    if(f.k==='burst') rnImg('fx_quarter_burst', f.x-32, f.y-32, 64, 64); else if(f.k==='puff') rnImg('fx_hit_puff', f.x-32, f.y-32, 64, 64);
+    else rnImg(Math.floor(f.t/0.1)%2?'fx_sparkle_a':'fx_sparkle_b', f.x-16, f.y-16, 32, 32); ctx.globalAlpha=1; }
+  // name labels, attached to the objects
+  for(const e of R.ents){ if(e.got || e.x<-30 || e.x>W+30) continue;
+    if(e.k==='coin') rnLabel('Torrentio', e.x, e.y-22, true);
+    else if(e.k==='hole') rnLabel('קובץ שבור', e.x+e.w/2, gy-6, false);
+    else if(RN_OBS[e.k]){ const o=RN_OBS[e.k], r=rnObsRect(e); rnLabel(e.label, e.x, r.y-4, false); } }
+  // last quarter: the edges get dark (Yael is tired); the hazards in front of her stay visible
+  if(R.q>=RUN.darkFrom && !R.done){ const g=ctx.createRadialGradient(130, 230, 90, 130, 230, 230); g.addColorStop(0,'rgba(5,3,20,0)'); g.addColorStop(1,'rgba(5,3,20,0.82)'); ctx.fillStyle=g; ctx.fillRect(0,60,W,H-60); }
+  // coming in from the bedroom: a short fade from black
+  if(R.introT<0.6){ ctx.fillStyle=`rgba(0,0,0,${(1-R.introT/0.6).toFixed(3)})`; ctx.fillRect(0,0,W,H); }
+  // HUD band (y 0-60): the episode in 4 quarters, and the awake meter
+  ctx.fillStyle='rgba(20,15,45,0.9)'; ctx.fillRect(4,4,W-8,24); ctx.fillRect(4,32,W-8,24);
+  ctx.textAlign='right'; ctx.direction='rtl'; ctx.textBaseline='middle'; ctx.font='bold 11px Heebo, sans-serif'; ctx.fillStyle='#f4f1ff'; ctx.fillText('הפרק', W-10, 16);
+  for(let i=0;i<4;i++){ const sw=46, sx=W-52-(i+1)*(sw+4)+4; ctx.fillStyle = i<R.got ? '#5dcaa5' : '#2d2560'; ctx.fillRect(sx, 10, sw, 12);
+    if(i===R.got && !R.done){ ctx.strokeStyle='#5dcaa5'; ctx.lineWidth=1; ctx.strokeRect(sx+0.5, 10.5, sw-1, 11); } }
+  const a=Math.max(0,N.awake), red=a<0.3, blink=red&&Math.floor(play.t*5)%2===0;
+  ctx.fillStyle='#f4f1ff'; ctx.fillText('ערנות', W-10, 44); const bx=12, bw=W-70; ctx.fillStyle='#2d2560'; ctx.fillRect(bx, 39, bw, 10);
+  ctx.fillStyle = a>0.6 ? '#5dcaa5' : !red ? '#f5c04a' : (blink?'#ff8080':'#f06a6a'); ctx.fillRect(bx+bw*(1-a), 39, bw*a, 10);
+  if(red && !R.reset){ ctx.font='900 14px Heebo, sans-serif'; ctx.textAlign='center'; ctx.lineJoin='round'; ctx.lineWidth=4; ctx.strokeStyle='#15112b'; ctx.strokeText('אספי קפה!', W/2, 78); ctx.fillStyle = blink ? '#ffffff' : '#f5c04a'; ctx.fillText('אספי קפה!', W/2, 78); }
+  ctx.textBaseline='alphabetic';
+  // the first seconds: how to move
+  if(R.introT<RUN.hintSec && R.got===0){ const al=Math.min(1,(RUN.hintSec-R.introT)/0.4); ctx.globalAlpha=al; ctx.fillStyle='rgba(20,15,45,0.88)'; ctx.fillRect(20,104,W-40,50);
+    ctx.strokeStyle='#f5c04a'; ctx.lineWidth=1.5; ctx.strokeRect(20.5,104.5,W-41,49); ctx.font='bold 13px Heebo, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl'; ctx.textBaseline='middle'; ctx.fillStyle='#f4f1ff';
+    ctx.fillText('לחצי כדי לקפוץ (ארוך = גבוה)', W/2, 120); ctx.fillText('החליקי למטה כדי להתכופף', W/2, 139); ctx.textBaseline='alphabetic'; ctx.globalAlpha=1; }
+  rnDrawFb(N);
+  drawMsg();
+}
+
+/* the right / wrong flash, shared by the runner and the boss fight */
+function rnDrawFb(N){
+  if(N.fb){ const t=N.fb.t, al=t>0.35 ? 1 : t/0.35, col=N.fb.ok?'93,202,165':'240,106,106';
+    ctx.fillStyle=`rgba(${col},${(0.3*al).toFixed(3)})`; ctx.fillRect(0,0,W,H); ctx.strokeStyle=`rgba(${col},${al.toFixed(3)})`; ctx.lineWidth=6; ctx.strokeRect(3,3,W-6,H-6);
+    ctx.save(); ctx.textAlign='center'; ctx.direction='rtl'; ctx.textBaseline='middle'; const fl=N.fb.text.split('\n'); let fs=30; ctx.font=`900 ${fs}px Heebo, sans-serif`; while(fs>16 && Math.max(...fl.map(l=>ctx.measureText(l).width))>W-24){ fs-=2; ctx.font=`900 ${fs}px Heebo, sans-serif`; }
+    ctx.translate(W/2, 150); ctx.globalAlpha=al; ctx.lineJoin='round'; ctx.lineWidth=7; ctx.strokeStyle='#15112b'; ctx.fillStyle=N.fb.ok?'#5dcaa5':'#f06a6a';
+    fl.forEach((l,i)=>{ const ly=(i-(fl.length-1)/2)*fs*1.15; ctx.strokeText(l, 0, ly); ctx.fillText(l, 0, ly); }); ctx.restore(); ctx.textBaseline='alphabetic'; }
+}
+
+/* ---------- chapter 7B boss fight: the Endless Loading Wheel (27.11.2026) ----------
+   Nitzan asked for a boss at the end of 7B. Boss = a giant, dark loading wheel. Yael's way to win = option 4:
+   popcorn flies at the boss by itself all the time; a tap at the exact moment a boredom arrow reaches her = she blocks it with the laptop,
+   it flies back and hits the boss twice as hard ("x2"). Otherwise tap = jump, swipe down = duck (same as the runner).
+   Two power meters: whoever empties the other first wins. A boredom arrow hit = Yael sleeps standing, with a smile, for 2.5 s and her meter drops.
+   Bad things get a red glow, good things a green glow (drawn in code). The angel TV (original design) gives bonus stars.
+   No hearts in the fight. Lose = the penalty screen with the chart, then the fight starts again. Win = a short message, then the bedroom ending.
+   Graphics: placeholders drawn in code until the ChatGPT pack arrives (claude/CH7B_BOSS_GRAPHICS_BRIEF.md). When it arrives:
+   put the files in assets/ch7b_boss/ and set BS_PACK=true. Numbers are Claude's first suggestion. */
+const BS_PACK=true; /* pack v2 from ChatGPT installed 27.11.2026 (assets/ch7b_boss/) */
+const BOSS={ x:200, y:160, r:55, /* boss center and body radius on screen (pack: center about 198,170; raised 10 px so the high arrows pass under it) */ scale:0.58,
+  yHP:100, bHP:100, introSec:2.6, retryIntro:0.9, hintSec:4.2, firstAtk:2.6,
+  popEvery:0.62, popSpeed:230, popDmg:1.3, parryDmg:10, parrySpeed:290, parryPose:0.35,
+  hitDmg:18, sleepSec:2.5, wakeSafe:0.7, /* a hit drains hitDmg over the 2.5 s of sleep */
+  lanes:{ low:286, high:236 }, arrowW:54, arrowH:11, /* pack collision rect [12,22,104,20] x 0.55 */ arrowS:0.55, arrowHitW:22, popS:0.55, angelS:0.42, arrowFromX:294, arrowSpeed:[130,142,155], /* arrows fly in from the right edge, under the boss (was from x 140 at 100-126: too close to Yael, Nitzan 27.11.2026) */
+  gaps:[[1.98,2.61],[1.62,2.16],[1.3,1.8]], /* 10% shorter = about 10% more attacks (Nitzan, 27.11.2026) */ windup:0.7, /* was 0.55 */ parryZone:[-2,20], /* about 0.15 s: a jump a bit early stays a jump, only a really late tap is a block (27.11.2026) */ /* arrow's left edge minus Yael's right edge (86), in px */
+  duckSec:1.0, /* a swipe down keeps Yael down for 1 s (the runner uses 0.5): the arrows come from further away now (27.11.2026) */ wheelS:0.42, wheelSpeed:120, wheelFromX:178,
+  angelAt:[0.68,0.32], angelSpeed:16, angelY:196, angelFrom:[118,80], /* starts left of the bigger boss (pack v2) */ angelDrop:40, angelStars:3, /* the angel floats down from the left of the boss toward Yael; a small jump touches it */
+  winHold:1.5, winMsgSec:3.2, loseHold:1.3, retryAfter:1.6 };
+const BS_IMG={};
+if(BS_PACK) for(const k of ['boss_wheel_idle_a','boss_wheel_idle_b','boss_wheel_idle_c','boss_wheel_attack','boss_wheel_hit','boss_wheel_defeat',
+  'proj_boredom_arrow_a','proj_boredom_arrow_b','proj_popcorn','fx_popcorn_hit','fx_parry_x2','fx_boss_boom','angel_tv_a','angel_tv_b',
+  'yael_throw','yael_parry','yael_sleep_stand','yael_boss_win']){ const im=new Image(); im.src=`assets/ch7b_boss/${k}.png`; BS_IMG[k]=im; }
+for(const k of ['fx_zzz_a','fx_zzz_b']){ const im=new Image(); im.src=`assets/${k}.png`; BS_IMG[k]=im; }
+function bsHas(k){ const im=BS_IMG[k]; return !!(im && im.complete && im.naturalWidth); }
+function bsImg(k, x, y, w, h){ const im=BS_IMG[k]; if(im&&im.complete&&im.naturalWidth){ ctx.drawImage(im, Math.round(x), Math.round(y), w, h); return true; } return false; }
+function bsGlow(good, blur){ ctx.shadowColor = good ? 'rgba(93,230,170,0.95)' : 'rgba(255,60,60,0.95)'; ctx.shadowBlur = blur||8; ctx.shadowOffsetX=0; ctx.shadowOffsetY=0; }
+function bsNoGlow(){ ctx.shadowBlur=0; ctx.shadowColor='transparent'; }
+
+function bsStart(R, retry){
+  R.ents=[]; R.fx=[]; R.done=0; R.reset=false; R.hitPose=null; R.poseQ=0; R.footY=RUN.groundY; R.vy=0; R.onGround=true; R.duckT=0; R.ptr=null; R.hold=false; R.speed=0;
+  R.boss={ phase:'intro', t:0, intro: retry ? BOSS.retryIntro : BOSS.introSec, retry:!!retry, yHP:BOSS.yHP, bHP:BOSS.bHP, shots:[], pops:[], fx:[],
+    nextAtk:BOSS.firstAtk, wind:null, popT:0.4, sleepT:0, safeT:0, parryT:0, hitT:0, angels:[], angelDone:[false,false], bob:0, fightT:0, parries:0, keyJump:false };
+  play.nt.awake=1; musicTempo(retry ? 1.35 : 0.8); updateGoal();
+  if(!retry) say('רגע. זה עוד טוען?', 1.2, 'yael');
+}
+function bsDown(e){ const R=play.nt.run; const p=l3pt(e); R.ptr={x:p.x, y:p.y, t:R.t}; bsTap(); }
+function bsTap(){ const R=play.nt.run, B=R.boss;
+  if(B.phase==='lose'){ if(B.t>=BOSS.loseHold+BOSS.retryAfter) bsStart(R, true); return; }
+  if(B.phase==='win'){ if(B.t>=BOSS.winHold+1.2) bsFinish(R); return; }
+  if(B.phase!=='fight' || B.sleepT>0) return;
+  const a=B.shots.find(s=>s.k==='arrow' && !s.par && (s.x-BOSS.arrowW/2-86)>=BOSS.parryZone[0] && (s.x-BOSS.arrowW/2-86)<=BOSS.parryZone[1]);
+  if(a){ const by=BOSS.y+Math.sin(B.bob*1.6)*6, dx=BOSS.x-a.x, dy=by-a.y, d=Math.hypot(dx,dy)||1; a.par=true; a.vx=dx/d*BOSS.parrySpeed; a.vy=dy/d*BOSS.parrySpeed; /* flies back straight into the boss */
+    B.parryT=BOSS.parryPose; B.parries++; SFX.ting(); B.fx.push({k:'parry', x:96, y:a.y, t:0.35, T:0.35}); ntFb(true, 'חסימה מושלמת!'); return; }
+  rnJump();
+}
+function bsFinish(R){ const N=play.nt; N.run=null; ntStartEnd(); updateGoal(); }
+function bsYaelRect(R){ return rnYaelRect(R); }
+function bsShotRect(s){ if(s.k==='arrow') return {x:s.x-BOSS.arrowW/2, y:s.y-BOSS.arrowH/2, w:BOSS.arrowHitW, h:BOSS.arrowH}; /* only the arrowhead hurts: the ZZZ tail is a trail, so a normal jump clears it (27.11.2026) */
+  const o=RN_OBS.buffer, sc=BOSS.wheelS, [hx,hy,hw,hh]=o.hint, x0=s.x-64*sc, y0=RUN.groundY-120*sc; return {x:x0+hx*sc+3, y:y0+hy*sc+3, w:hw*sc-6, h:hh*sc-6}; }
+function bsLevel(B){ const f=B.bHP/BOSS.bHP; return f>0.66 ? 0 : f>0.33 ? 1 : 2; }
+function bsPickAttack(B){ const lv=bsLevel(B), r=Math.random();
+  if(lv===0) return [{k:'arrow', lane: r<0.5?'low':'high'}];
+  if(lv===1) return r<0.7 ? [{k:'arrow', lane: Math.random()<0.5?'low':'high'}] : [{k:'wheel'}];
+  if(r<0.5) return [{k:'arrow', lane: Math.random()<0.5?'low':'high'}];
+  if(r<0.75){ const first=Math.random()<0.5?'low':'high'; return [{k:'arrow', lane:first}, {k:'arrow', lane: first==='low'?'high':'low', delay:0.75}]; }
+  return [{k:'wheel'}];
+}
+function bsSpawn(B, a){ const lv=bsLevel(B);
+  if(a.k==='arrow') B.shots.push({k:'arrow', lane:a.lane, x:BOSS.arrowFromX, y:BOSS.lanes[a.lane], vx:-BOSS.arrowSpeed[lv], t:0, par:false});
+  else B.shots.push({k:'wheel', x:BOSS.wheelFromX, vx:-BOSS.wheelSpeed, t:0});
+  B.fireT=0.25; /* the boss flashes when it shoots */ SFX.puff();
+}
+function bsHitYael(R, B, kind){ B.sleepT=BOSS.sleepSec; B.parryT=0; R.vy=Math.max(R.vy,0); R.duckT=0; R.ptr=null; R.hold=false; SFX.wrong(); /* was SFX.hide: too close to the block sound (27.11.2026) */
+  B.fx.push({k:'puff', x:RUN.yaelX+16, y:Math.min(R.footY,RUN.groundY)-40, t:0.25, T:0.25}); ntFb(false, kind==='wheel' ? 'טורנט פח' : 'חץ שעמום!'); } /* small wheels: 'טורנט פח' (Nitzan, 27.11.2026) */
+function bsUpdate(dt){
+  const N=play.nt, R=N.run, B=R.boss; B.t+=dt; B.bob+=dt;
+  for(const f of B.fx) f.t-=dt; B.fx=B.fx.filter(f=>f.t>0);
+  if(B.hitT>0) B.hitT-=dt; if(B.fireT>0) B.fireT-=dt;
+  const kj=!!(play.keys[' ']||play.keys['ArrowUp']); if(kj && !B.keyJump) bsTap(); if(!kj && B.keyJump) rnRelease(); B.keyJump=kj;
+  if(B.phase==='intro'){ if(B.t>=B.intro){ B.phase='fight'; B.t=0; B.fightT=0; musicTempo(1.35); } return; }
+  if(B.phase==='win'){ if(B.t>=BOSS.winHold+BOSS.winMsgSec) bsFinish(R); return; }
+  if(B.phase==='lose') return;
+  // fight
+  B.fightT+=dt; if(play.keys['ArrowDown'] && B.sleepT<=0) rnDuck();
+  // Yael: same jump and duck as the runner (no holes here)
+  if(R.duckT>0){ R.duckT-=dt; if(R.duckT<=0 && (R.ptr || play.keys['ArrowDown'])) R.duckT=0.05; }
+  if(!R.onGround){ R.vy+=RUN.gravity*dt; R.footY+=R.vy*dt; if(R.footY>=RUN.groundY && R.vy>0){ R.footY=RUN.groundY; R.vy=0; R.onGround=true; if(R.wantDuck){ R.wantDuck=false; rnDuck(); } } }
+  if(B.parryT>0) B.parryT-=dt;
+  if(B.safeT>0) B.safeT-=dt;
+  if(B.sleepT>0){ B.sleepT-=dt; B.yHP-=BOSS.hitDmg/BOSS.sleepSec*dt; if(B.sleepT<=0){ B.sleepT=0; B.safeT=BOSS.wakeSafe; } }
+  // popcorn, all the time while she is awake
+  B.popT-=dt;
+  if(B.popT<=0 && B.sleepT<=0){ B.popT=BOSS.popEvery; const sx=RUN.yaelX+(R.duckT>0?20:44), sy=Math.min(R.footY,RUN.groundY)-(R.duckT>0?30:72), /* the hand in yael_throw */ by=BOSS.y+Math.sin(B.bob*1.6)*6;
+    const dx=BOSS.x-sx, dy=by-sy, d=Math.hypot(dx,dy)||1; B.pops.push({x:sx, y:sy, vx:dx/d*BOSS.popSpeed, vy:dy/d*BOSS.popSpeed, t:0}); }
+  for(const p of B.pops){ p.x+=p.vx*dt; p.y+=p.vy*dt; p.t+=dt; }
+  const by=BOSS.y+Math.sin(B.bob*1.6)*6;
+  B.pops=B.pops.filter(p=>{ if(Math.hypot(p.x-BOSS.x, p.y-by)<BOSS.r){ B.bHP-=BOSS.popDmg; B.hitT=Math.max(B.hitT,0.12); B.fx.push({k:'pop', x:p.x, y:p.y, t:0.22, T:0.22}); return false; } return p.x<W+20; });
+  // boss attacks: a short wind-up (eyes glow, a red line shows the lane), then the shot
+  if(B.wind){ B.wind.t-=dt; if(B.wind.t<=0){ bsSpawn(B, B.wind.a[0]); const rest=B.wind.a.slice(1); B.wind = rest.length ? {t:rest[0].delay||0.6, a:rest} : null; } }
+  else if(B.sleepT<=0){ B.nextAtk-=dt; if(B.nextAtk<=0){ const a=bsPickAttack(B); B.wind={t:BOSS.windup, a}; const g=BOSS.gaps[bsLevel(B)]; B.nextAtk=g[0]+Math.random()*(g[1]-g[0]); } }
+  // shots move
+  for(const s of B.shots){ s.x+=s.vx*dt; s.y+=(s.vy||0)*dt; s.t+=dt; }
+  const Y=bsYaelRect(R);
+  B.shots=B.shots.filter(s=>{
+    if(s.k==='arrow' && s.par){ if(Math.hypot(s.x-BOSS.x, s.y-by)<BOSS.r){ B.bHP-=BOSS.parryDmg; B.hitT=0.35; SFX.win(); B.fx.push({k:'x2', x:BOSS.x-20, y:by-10, t:0.7, T:0.7}); return false; } return true; }
+    if(s.x<-40) return false;
+    if(B.sleepT<=0 && B.safeT<=0 && rnHit(Y, bsShotRect(s))){ bsHitYael(R,B,s.k); return false; }
+    return true; });
+  // the angel TV: twice in the fight, when the boss is down to about 2/3 and 1/3
+  for(let i=0;i<BOSS.angelAt.length;i++) if(!B.angelDone[i] && B.bHP/BOSS.bHP<=BOSS.angelAt[i]){ B.angelDone[i]=true; B.angels.push({x:BOSS.angelFrom[0], y:BOSS.angelFrom[1], t:0}); }
+  for(const a of B.angels){ a.t+=dt; a.x=BOSS.angelFrom[0]-BOSS.angelSpeed*a.t; a.y=Math.min(BOSS.angelY, BOSS.angelFrom[1]+BOSS.angelDrop*a.t)+Math.sin(a.t*2.4)*6; }
+  B.angels=B.angels.filter(a=>{ if(!a.got && rnHit(Y, {x:a.x-15, y:a.y-15, w:30, h:30})){ a.got=true; state.chapterCoins+=BOSS.angelStars; renderHud(); SFX.ting();
+      B.fx.push({k:'sparkle', x:a.x, y:a.y, t:0.6, T:0.6}); ntFb(true, 'זיכרון מתוק\nמאתר סדרות'); return false; } return a.x>-30; });
+  // the end
+  if(B.bHP<=0){ B.bHP=0; B.phase='win'; B.t=0; B.shots=[]; B.pops=[]; B.wind=null; B.angels=[]; B.sleepT=0; SFX.win(); musicTempo(1.0);
+    B.fx.push({k:'boom', x:BOSS.x, y:by, t:0.9, T:0.9}); updateGoal(); return; }
+  if(B.yHP<=0){ B.yHP=0; B.phase='lose'; B.t=0; B.shots=[]; B.pops=[]; B.wind=null; B.angels=[]; B.sleepT=99; SFX.wrong(); musicTempo(0.8); updateGoal(); return; }
+}
+
+/* ---- drawing ---- */
+function bsDrawBoss(B, by){ const ph=B.phase, lose=ph==='lose', win=ph==='win';
+  let sc=BOSS.scale; if(ph==='intro' && !B.retry) sc = 0.12 + (BOSS.scale-0.12)*Math.min(1, B.t/(B.intro*0.8));
+  const atk = !!B.wind || B.fireT>0 || lose, hit=B.hitT>0, dead=win;
+  const pk = dead ? 'boss_wheel_defeat' : hit ? 'boss_wheel_hit' : atk ? 'boss_wheel_attack' : 'boss_wheel_idle_'+'abc'[Math.floor(B.bob/0.18)%3];
+  const sz=256*sc;
+  if(!dead || B.t<1.2){ ctx.save(); if(dead) ctx.globalAlpha=Math.max(0,1-B.t/1.2); bsGlow(false, B.fireT>0 ? 26 : 14);
+    if(!(BS_PACK && bsImg(pk, BOSS.x-sz/2, by-sz/2, sz, sz))) bsDrawWheel(BOSS.x, by, 94*sc, B, atk, hit, dead); ctx.restore(); bsNoGlow(); }
+}
+/* placeholder: a giant dark loading wheel with angry red eyes */
+function bsDrawWheel(cx, cy, r, B, atk, hit, dead){
+  const n=10, step=Math.floor(B.bob/0.11)%n, spread = dead ? B.t*60 : 0;
+  for(let i=0;i<n;i++){ const ang=-Math.PI/2 + i*2*Math.PI/n, lead=(i-step+n)%n, rr=r+spread;
+    const px=cx+Math.cos(ang)*rr*0.78, py=cy+Math.sin(ang)*rr*0.78;
+    ctx.save(); ctx.translate(px,py); ctx.rotate(ang+Math.PI/2);
+    ctx.fillStyle = hit ? '#ffffff' : lead===0 ? '#7a3fb0' : lead<3 ? '#4b2575' : (i%3===0 ? '#4a4560' : '#2a1645');
+    const w=r*0.36, h=r*0.5; ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(-w/2,-h/2,w,h,w*0.35); else ctx.rect(-w/2,-h/2,w,h); ctx.fill();
+    ctx.strokeStyle='#0d0819'; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+  if(dead) return;
+  // face
+  ctx.fillStyle='#120a22'; ctx.beginPath(); ctx.arc(cx, cy, r*0.48, 0, Math.PI*2); ctx.fill();
+  const er = atk ? r*0.12 : r*0.09, eg = atk ? '#ff4040' : '#e02a2a';
+  ctx.fillStyle=eg; bsGlow(false, atk?12:6);
+  ctx.beginPath(); ctx.arc(cx-r*0.18, cy-r*0.08, er, 0, Math.PI*2); ctx.fill();
+  if(!hit){ ctx.beginPath(); ctx.arc(cx+r*0.18, cy-r*0.08, er, 0, Math.PI*2); ctx.fill(); } else { ctx.fillRect(cx+r*0.1, cy-r*0.09, r*0.16, 3); }
+  ctx.strokeStyle=eg; ctx.lineWidth=2.5; ctx.beginPath();
+  if(atk){ ctx.ellipse(cx, cy+r*0.2, r*0.14, r*0.1, 0, 0, Math.PI*2); } else { ctx.arc(cx, cy+r*0.08, r*0.22, 0.2*Math.PI, 0.8*Math.PI); }
+  ctx.stroke(); bsNoGlow();
+}
+/* placeholder: a boredom arrow flying left, with a sleepy Z */
+function bsDrawArrow(s){ const good=s.par, k='proj_boredom_arrow_'+(Math.floor(s.t/0.15)%2?'b':'a');
+  ctx.save(); bsGlow(good, 8);
+  if(BS_PACK && bsHas(k)){ const aw=128*BOSS.arrowS, ah=64*BOSS.arrowS; ctx.imageSmoothingEnabled=false; if(good){ ctx.translate(s.x, s.y); ctx.rotate(Math.atan2(s.vy||0, s.vx)-Math.PI); bsImg(k, -aw/2, -ah/2, aw, ah); } else bsImg(k, s.x-aw/2, s.y-ah/2, aw, ah); }
+  else { const dir = good ? 1 : -1, x=s.x, y=s.y, L=BOSS.arrowW/2;
+    ctx.strokeStyle = good ? '#9ff0cf' : '#b9a8d8'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x-dir*L, y); ctx.lineTo(x+dir*(L-4), y); ctx.stroke();
+    ctx.fillStyle = good ? '#d8fff0' : '#d9cdf0'; ctx.beginPath(); ctx.moveTo(x+dir*L+dir*4, y); ctx.lineTo(x+dir*(L-8), y-6); ctx.lineTo(x+dir*(L-8), y+6); ctx.closePath(); ctx.fill();
+    bsNoGlow(); ctx.font='900 11px Heebo, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle = good ? '#5dcaa5' : '#8f7fb8';
+    ctx.fillText('Z', x-dir*(L-2), y-7+Math.sin(s.t*8)*1.5); ctx.textBaseline='alphabetic'; }
+  ctx.restore(); bsNoGlow(); }
+function bsDrawWheelShot(s){ const sc=BOSS.wheelS, k='obs_buffer_'+(Math.floor(s.t/0.09)%2?'b':'a');
+  ctx.save(); bsGlow(false, 8); rnImg(k, s.x-64*sc, RUN.groundY-120*sc, 128*sc, 128*sc); ctx.restore(); bsNoGlow(); }
+function bsDrawPop(p){ ctx.save(); bsGlow(true, 6);
+  const ps=64*BOSS.popS; if(!(BS_PACK && bsImg('proj_popcorn', p.x-ps/2, p.y-ps/2, ps, ps))){ ctx.fillStyle='#fff6d8';
+    for(const [ox,oy,rr] of [[-3,-1,3.2],[2,-3,2.8],[3,2,3],[-1,3,2.6]]){ ctx.beginPath(); ctx.arc(p.x+ox, p.y+oy, rr, 0, Math.PI*2); ctx.fill(); }
+    ctx.fillStyle='#f5c04a'; ctx.fillRect(Math.round(p.x)-1, Math.round(p.y), 2, 2); }
+  ctx.restore(); bsNoGlow(); }
+/* placeholder: the angel TV (original design: an old boxy TV, antennae, wings, halo, classic TV test-pattern bars on the screen, a heart) */
+function bsDrawAngel(a){ const fr=Math.floor(a.t/0.22)%2;
+  ctx.save(); bsGlow(true, 10);
+  const as=128*BOSS.angelS; if(!(BS_PACK && bsImg(fr?'angel_tv_b':'angel_tv_a', a.x-as/2, a.y-as/2, as, as))){ const x=Math.round(a.x), y=Math.round(a.y), wy = fr ? -4 : 2;
+    // wings
+    ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.moveTo(x-13,y-2); ctx.lineTo(x-25,y-8+wy); ctx.lineTo(x-22,y+4+wy*0.5); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+13,y-2); ctx.lineTo(x+25,y-8+wy); ctx.lineTo(x+22,y+4+wy*0.5); ctx.closePath(); ctx.fill();
+    bsNoGlow();
+    // antennae and halo
+    ctx.strokeStyle='#c9c2dd'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(x-2,y-11); ctx.lineTo(x-8,y-20); ctx.moveTo(x+2,y-11); ctx.lineTo(x+8,y-20); ctx.stroke();
+    ctx.strokeStyle='#f5c04a'; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(x, y-23, 9, 3, 0, 0, Math.PI*2); ctx.stroke();
+    // body and screen with test-pattern bars
+    ctx.fillStyle='#7b5a3e'; ctx.fillRect(x-14, y-11, 28, 24); ctx.strokeStyle='#3b2a1c'; ctx.lineWidth=1; ctx.strokeRect(x-13.5, y-10.5, 27, 23);
+    const bars=['#e8e8e8','#e8e000','#00e0e0','#00d000','#e000e0','#e00000','#0000e0']; for(let i=0;i<7;i++){ ctx.fillStyle=bars[i]; ctx.fillRect(x-11+i*3, y-8, 3, 11); }
+    ctx.fillStyle='#202020'; ctx.fillRect(x-11, y+3, 21, 2);
+    // smile and heart on the body
+    ctx.strokeStyle='#2a1c10'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(x-3, y+7, 2.5, 0.15*Math.PI, 0.85*Math.PI); ctx.stroke();
+    const hb = 1+0.15*Math.sin(a.t*6); ctx.fillStyle='#ff7aa8'; ctx.beginPath(); ctx.arc(x+6-1.4*hb, y+8, 1.6*hb, 0, Math.PI*2); ctx.arc(x+6+1.4*hb, y+8, 1.6*hb, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+6-3*hb, y+8.5); ctx.lineTo(x+6+3*hb, y+8.5); ctx.lineTo(x+6, y+12*hb-1); ctx.closePath(); ctx.fill(); }
+  ctx.restore(); bsNoGlow(); }
+function bsPoseKey(R, B){
+  if(B.phase==='win') return bsHas('yael_boss_win') ? 'B:yael_boss_win' : 'yael_quarter';
+  if(B.sleepT>0) return bsHas('yael_sleep_stand') ? 'B:yael_sleep_stand' : 'yael_asleep_fall';
+  if(B.parryT>0) return bsHas('yael_parry') ? 'B:yael_parry' : 'yael_quarter';
+  if(!R.onGround) return 'yael_jump';
+  if(R.duckT>0) return 'yael_duck';
+  if(bsHas('yael_throw')) return 'B:yael_throw'; /* the pack's throw pose is her stance in the fight */
+  if(B.phase==='fight' && B.popT>BOSS.popEvery-0.18) return 'yael_run_b';
+  return 'yael_run_a';
+}
+function bsDrawFx(B){ for(const f of B.fx){ const al=Math.max(0,f.t/f.T); ctx.globalAlpha=al;
+    if(f.k==='pop'){ if(!(BS_PACK && bsImg('fx_popcorn_hit', f.x-24, f.y-24, 48, 48))){ ctx.fillStyle='#fff6d8'; for(let i=0;i<6;i++){ const an=i*Math.PI/3, d=(1-al)*12+3; ctx.fillRect(Math.round(f.x+Math.cos(an)*d)-1, Math.round(f.y+Math.sin(an)*d)-1, 3, 3); } } }
+    else if(f.k==='puff') rnImg('fx_hit_puff', f.x-32, f.y-32, 64, 64);
+    else if(f.k==='sparkle') rnImg(Math.floor(f.t/0.1)%2?'fx_sparkle_a':'fx_sparkle_b', f.x-20, f.y-20, 40, 40);
+    else if(f.k==='parry'){ ctx.strokeStyle='#5dcaa5'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(f.x, f.y, 10+(1-al)*14, 0, Math.PI*2); ctx.stroke(); }
+    else if(f.k==='x2'){ const s=1+(1-al)*0.4; if(!(BS_PACK && bsImg('fx_parry_x2', f.x-38*s, f.y-38*s, 77*s, 77*s))){ ctx.save(); ctx.translate(f.x, f.y); ctx.scale(s,s);
+        bsGlow(true, 10); ctx.fillStyle='#5dcaa5'; ctx.beginPath(); ctx.moveTo(-22,-10); ctx.lineTo(-10,0); ctx.lineTo(-22,10); ctx.closePath(); ctx.moveTo(-10,-10); ctx.lineTo(2,0); ctx.lineTo(-10,10); ctx.closePath(); ctx.fill();
+        ctx.font='900 18px Heebo, sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.lineWidth=4; ctx.strokeStyle='#15112b'; ctx.direction='ltr'; ctx.strokeText('x2', 6, 1); ctx.fillStyle='#ffffff'; ctx.fillText('x2', 6, 1); ctx.restore(); bsNoGlow(); ctx.textBaseline='alphabetic'; } }
+    else if(f.k==='boom'){ const s=(1-al); if(!(BS_PACK && bsImg('fx_boss_boom', f.x-80-s*30, f.y-80-s*30, 160+s*60, 160+s*60))){ ctx.fillStyle='#f5c04a'; for(let i=0;i<14;i++){ const an=i*Math.PI/7, d=20+s*90; ctx.fillRect(Math.round(f.x+Math.cos(an)*d)-3, Math.round(f.y+Math.sin(an)*d)-3, 6, 6); } } }
+    ctx.globalAlpha=1; } }
+const BS_NAME='האמ-אמא של הטעינות'; /* the boss's name in the game (Nitzan, 27.11.2026; was 'גלגל הטעינה') */
+function bsMeter(label, y, val, col, B){ ctx.font='bold 11px Heebo, sans-serif'; const lw=Math.ceil(ctx.measureText(BS_NAME).width), bx=12, bw=W-12-10-lw-8;
+  ctx.fillStyle='rgba(20,15,45,0.9)'; ctx.fillRect(4, y-12, W-8, 24); ctx.textAlign='right'; ctx.direction='rtl'; ctx.textBaseline='middle'; ctx.font='bold 11px Heebo, sans-serif'; ctx.fillStyle='#f4f1ff'; ctx.fillText(label, W-10, y);
+  ctx.fillStyle='#2d2560'; ctx.fillRect(bx, y-5, bw, 10); const a=Math.max(0, val); ctx.fillStyle=col; ctx.fillRect(bx+bw*(1-a), y-5, bw*a, 10); ctx.textBaseline='alphabetic'; }
+function bsText(t, x, y, size, col, weight){ ctx.font=`${weight||900} ${size}px Heebo, sans-serif`; ctx.textAlign='center'; ctx.direction='rtl'; ctx.textBaseline='middle'; ctx.lineJoin='round'; ctx.lineWidth=Math.max(3,size/4); ctx.strokeStyle='#15112b'; ctx.strokeText(t, x, y); ctx.fillStyle=col; ctx.fillText(t, x, y); ctx.textBaseline='alphabetic'; }
+function bsDraw(){
+  const N=play.nt, R=N.run, B=R.boss, gy=RUN.groundY, by=BOSS.y+Math.sin(B.bob*1.6)*6;
+  // the runner world, stopped, darker and redder
+  ctx.imageSmoothingEnabled=false; rnImg('bg_stream_far_270x360', 0, 0, W, H);
+  const mo=Math.floor(R.midOff); rnImg('bg_stream_mid_540x240', -mo, 60, 540, 240); rnImg('bg_stream_mid_540x240', -mo+540, 60, 540, 240);
+  const fo=Math.floor(R.floorOff); for(let x=-fo; x<W; x+=64) rnImg('ground_timeline_tile_64x60', x, gy, 64, 60);
+  ctx.imageSmoothingEnabled=true;
+  const tint = B.phase==='intro' && !B.retry ? Math.min(1, B.t/1.2) : B.phase==='win' ? Math.max(0, 1-B.t/1.2) : 1;
+  ctx.fillStyle=`rgba(40,0,20,${(0.45*tint).toFixed(3)})`; ctx.fillRect(0,0,W,H);
+  const g=ctx.createRadialGradient(BOSS.x, by, 30, BOSS.x, by, 200); g.addColorStop(0,`rgba(120,10,40,${(0.35*tint).toFixed(3)})`); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  /* the red dashed lane line before an arrow was removed (Nitzan, 27.11.2026) */
+  if(B.wind && B.wind.a[0].k==='wheel' && B.phase==='fight'){ ctx.fillStyle=`rgba(255,70,70,${(0.3+0.3*Math.sin(B.t*30)).toFixed(3)})`; ctx.fillRect(90, gy-3, BOSS.wheelFromX-90, 3); }
+  ctx.imageSmoothingEnabled=false; bsDrawBoss(B, by);
+  for(const a of B.angels) bsDrawAngel(a);
+  for(const s of B.shots) s.k==='arrow' ? bsDrawArrow(s) : bsDrawWheelShot(s);
+  for(const p of B.pops) bsDrawPop(p);
+  // the parry ring in front of Yael: it lights up when an arrow is in the right spot
+  if(B.phase==='fight' && B.sleepT<=0){ const inZone=B.shots.some(s=>s.k==='arrow' && !s.par && (s.x-BOSS.arrowW/2-86)>=BOSS.parryZone[0] && (s.x-BOSS.arrowW/2-86)<=BOSS.parryZone[1]);
+    const near=B.shots.some(s=>s.k==='arrow' && !s.par && s.x-BOSS.arrowW/2-86<80);
+    if(near){ ctx.strokeStyle = inZone ? 'rgba(93,230,170,0.95)' : 'rgba(244,241,255,0.35)'; ctx.lineWidth = inZone ? 3 : 1.5; ctx.beginPath(); ctx.arc(100, Math.min(R.footY,gy)-40, 22, -Math.PI/2.2, Math.PI/2.2); ctx.stroke(); } }
+  // Yael
+  const yk=bsPoseKey(R,B), blink=B.safeT>0 && Math.floor(B.t*14)%2===0;
+  if(!blink){ const fx0=RUN.yaelX-128*RUN.ys, fy0=Math.min(R.footY, gy+60)-240*RUN.ys, sz=256*RUN.ys;
+    if(yk.startsWith('B:')) bsImg(yk.slice(2), fx0, fy0, sz, sz); else rnImg(yk, fx0, fy0, sz, sz); }
+  if(B.sleepT>0){ const zk=Math.floor(B.t/0.4)%2?'fx_zzz_a':'fx_zzz_b'; if(!bsImg(zk, RUN.yaelX+2, gy-118, 36, 36)) bsText('Z z z', RUN.yaelX+20, gy-100, 12, '#c9c2dd'); }
+  bsDrawFx(B);
+  // the two power meters
+  bsMeter('יעל', 16, B.yHP/BOSS.yHP, (B.sleepT>0 && B.phase==='fight') ? (Math.floor(B.t*8)%2?'#ffffff':'#f06a6a') : B.yHP/BOSS.yHP>0.3 ? '#5dcaa5' : '#f06a6a', B); /* blinks while it drops */
+  bsMeter(BS_NAME, 44, B.bHP/BOSS.bHP, '#f06a6a', B);
+  // intro: the boss name, then a short "how to win"
+  if(B.phase==='intro'){ if(!B.retry){ const al=Math.min(1, B.t/0.5); ctx.globalAlpha=al; bsText('האתגר האחרון', W/2, 96, 26, '#f06a6a'); /* was 'בוס!' (Nitzan, 27.11.2026) */ bsText(BS_NAME, W/2, 124, 18, '#f4f1ff'); ctx.globalAlpha=1; }
+    else bsText('עוד סיבוב', W/2, 110, 22, '#f5c04a'); }
+  if(B.phase==='fight' && B.fightT<BOSS.hintSec && !B.retry){ const al=Math.min(1,(BOSS.hintSec-B.fightT)/0.4); ctx.globalAlpha=al; ctx.fillStyle='rgba(20,15,45,0.9)'; ctx.fillRect(16,70,W-32,62);
+    ctx.strokeStyle='#f5c04a'; ctx.lineWidth=1.5; ctx.strokeRect(16.5,70.5,W-33,61); ctx.font='bold 12px Heebo, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl'; ctx.textBaseline='middle'; ctx.fillStyle='#f4f1ff';
+    ctx.fillText('הפופקורן עף לבד', W/2, 84); ctx.fillText('לחצי בדיוק כשחץ מגיע אלייך = x2', W/2, 101); ctx.fillText('לחיצה = קפיצה, החלקה למטה = התכופפות', W/2, 118); ctx.textBaseline='alphabetic'; ctx.globalAlpha=1; }
+  // the flash (right / wrong)
+  rnDrawFb(N);
+  // win: a short message, then the bedroom ending
+  if(B.phase==='win' && B.t>=BOSS.winHold){ const al=Math.min(1,(B.t-BOSS.winHold)/0.3); ctx.globalAlpha=al; ctx.fillStyle='rgba(20,15,45,0.92)'; ctx.fillRect(14,118,W-28,92);
+    ctx.strokeStyle='#5dcaa5'; ctx.lineWidth=2; ctx.strokeRect(15,119,W-30,90); bsText('מזל טוב,', W/2, 146, 22, '#5dcaa5'); bsText('לא תצטרכי לצפות ב״אתי״', W/2, 178, 17, '#f4f1ff'); ctx.globalAlpha=1; }
+  // lose: the penalty screen
+  if(B.phase==='lose' && B.t>=BOSS.loseHold) bsDrawPenalty(B);
+  drawMsg();
+}
+function bsDrawPenalty(B){ const al=Math.min(1,(B.t-BOSS.loseHold)/0.4); ctx.globalAlpha=al;
+  ctx.fillStyle='rgba(15,10,32,0.96)'; ctx.fillRect(0,0,W,H);
+  bsText('העונש:', W/2, 40, 24, '#f06a6a'); bsText('לצפות בכל חמשת הפרקים', W/2, 70, 18, '#f4f1ff'); bsText('הנותרים של ׳אתי׳', W/2, 94, 18, '#f4f1ff');
+  bsText('חישבתי ובקצב הנוכחי', W/2, 124, 12, '#c9c2dd', 700); bsText('זה ייקח לכם חמישה שבועות', W/2, 141, 12, '#c9c2dd', 700);
+  // the chart: one episode a week, five weeks, and everyone asleep
+  const x0=34, x1=W-18, y0=290, y1=168; ctx.strokeStyle='#8f7fb8'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(x0,y1); ctx.lineTo(x0,y0); ctx.lineTo(x1,y0); ctx.stroke();
+  ctx.save(); ctx.translate(16, (y0+y1)/2); ctx.rotate(-Math.PI/2); ctx.font='bold 10px Heebo, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl'; ctx.fillStyle='#c9c2dd'; ctx.fillText('זמן צפייה', 0, 0); ctx.restore();
+  const bw=26, gap=(x1-x0-5*bw)/6, grow=Math.min(1, Math.max(0,(B.t-BOSS.loseHold-0.3)/0.8));
+  for(let i=0;i<5;i++){ const bx=x0+gap+(i)*(bw+gap), h=[62,78,56,84,70][i]*grow; /* taller bars, each a bit different (Nitzan, 27.11.2026) */ ctx.fillStyle = i===4 ? '#f06a6a' : '#7a3fb0'; ctx.fillRect(bx, y0-h, bw, h);
+    ctx.font='bold 9px Heebo, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl'; ctx.fillStyle='#c9c2dd'; ctx.fillText('שבוע '+(i+1), bx+bw/2, y0+12);
+    if(grow>=1){ ctx.fillStyle='#f4f1ff'; ctx.fillText('פרק '+(i+2), bx+bw/2, y0-h-6); /* episodes 2-6: Yael already watched episode 1 (Nitzan, 27.11.2026) */
+      const zt=(B.t*0.9+i*0.37)%1; ctx.globalAlpha=al*(1-zt); ctx.font='900 '+(9+zt*6)+'px Heebo, sans-serif'; ctx.fillStyle='#b9a8d8'; ctx.direction='ltr'; ctx.fillText('Z z z', bx+bw/2+zt*6, y0-h-20-zt*30); ctx.globalAlpha=al; } }
+  if(B.t>=BOSS.loseHold+BOSS.retryAfter){ const pulse=0.75+0.25*Math.sin(B.t*5); ctx.fillStyle='#f5c04a'; ctx.globalAlpha=al*pulse; ctx.fillRect(W/2-80, 318, 160, 30); ctx.globalAlpha=al;
+    ctx.font='900 14px Heebo, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl'; ctx.textBaseline='middle'; ctx.fillStyle='#15112b'; ctx.fillText('נסי שוב את הקרב', W/2, 334); ctx.textBaseline='alphabetic'; }
+  ctx.globalAlpha=1; }
+
+/* ---------- chapter 7B ending after the boss (27.11.2026) ----------
+   Nitzan asked: no "asleep, then she talks and snores". The eyes close slowly from the edges (black lids), Yael stays awake
+   until the end of her ZZZ sentence, then she is seen asleep, the screen goes fully black, and the round "sleeping Yael" card
+   from the ChatGPT pack (ending_yael_sleep_a/b) shows. A tap skips the card after 0.8 s. Then the usual chapter-done screen. */
+const NT_END7B={ lidFrom:5.9, lidMid:0.35, sleepAt:11.2, lidFull:12.9, cardAt:13.2, cardSec:4.2, frameSec:0.85, skipAfter:0.8 };
+for(const k of ['ending_yael_sleep_a','ending_yael_sleep_b']){ const im=new Image(); im.src=`assets/ch7b_boss/${k}.png`; BS_IMG[k]=im; }
+function ntEnd7b(E){
+  const N=play.nt, T=NT_END7B, t=E.t;
+  const seq=[[0.4,()=>say('סיימנו פרק שלם', 1.2, 'yael')],[2.6,()=>say('עוד אחד?', 1.0, 'nitzan')],[4.4,()=>say('ברור', 0.8, 'yael')],
+    [6.9,()=>{ N.nPose='smile'; say('רבע פרק. כמו תמיד', 1.4, 'nitzan'); }],
+    [9.3,()=>say('עכשיו אני אחזיק יותר זמ... ZZZZZZ', 1.5, 'yael')],
+    [T.sleepAt,()=>{ N.endPose='asleep'; SFX.hide(); }], /* only now she is seen asleep */
+    [T.cardAt,()=>{ play.msg=null; musicTempo(0.8); }]];
+  while(E.step<seq.length && t>=seq[E.step][0]){ seq[E.step][1](); E.step++; }
+  E.lid = t<T.lidFrom ? 0 : t<T.sleepAt ? T.lidMid*(t-T.lidFrom)/(T.sleepAt-T.lidFrom) + 0.04*Math.max(0,Math.sin((t-T.lidFrom)*2.2))
+        : Math.min(1, T.lidMid+(1-T.lidMid)*(t-T.sleepAt)/(T.lidFull-T.sleepAt));
+  E.cardT = t>=T.cardAt ? t-T.cardAt : 0;
+  if(!E.won && E.cardT>0 && (E.cardT>=T.cardSec || (E.skip && E.cardT>=T.skipAfter))){ E.won=true; SFX.win(); winNow(); }
+  E.skip=false;
+}
+function ntEndOverlay(which){
+  const N=play.nt, E=N.end; if(!E || cur().id!=='night2') return;
+  if(which==='lids' && E.lid>0){ const p=Math.min(1,E.lid);
+    ctx.fillStyle=`rgba(5,3,20,${(0.45*p).toFixed(3)})`; ctx.fillRect(0,0,W,H);
+    if(p>=1){ ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H); return; }
+    const lid=Math.round((H/2+18)*p), f=18;
+    let g=ctx.createLinearGradient(0,0,0,lid); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(Math.max(0,(lid-f)/Math.max(1,lid)),'rgba(0,0,0,0.97)'); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,lid);
+    g=ctx.createLinearGradient(0,H,0,H-lid); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(Math.max(0,(lid-f)/Math.max(1,lid)),'rgba(0,0,0,0.97)'); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(0,H-lid,W,lid); }
+  if(which==='card' && E.cardT>0){ ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+    const k=Math.floor(E.cardT/NT_END7B.frameSec)%2 ? 'ending_yael_sleep_b' : 'ending_yael_sleep_a';
+    ctx.save(); ctx.globalAlpha=Math.min(1,E.cardT/0.5); ctx.imageSmoothingEnabled=false; bsImg(k, 0, 45, 270, 270); ctx.restore(); }
+}
 
 /* ---------- chapters ---------- */
 const CHAPTERS = [
@@ -1665,6 +2178,7 @@ const CHAPTERS = [
   CH5,
   CH6,
   CH7,
+  CH7B,
 ];
 const cur=()=>CHAPTERS[state.chapter];
 
@@ -1814,8 +2328,9 @@ function updateGoal(){
     const S=play.st; $('goalCount').textContent = (S.kid==='yotam'?'יותם · ':"צ'ופה · ")+Math.ceil(Math.max(0, STORIES.roundSeconds-S.roundT))+' שניות';
     $('barfill').style.width = (S.pos*100)+'%';
   } else if(play.mode==='night'){
-    const N=play.nt; if(N.part==='A'){ $('goalText').textContent = N.fetch ? 'ניצן הולך להביא את המטען' : 'לשכנע את ניצן להביא את המטען'; $('goalCount').textContent='סוללה '+Math.ceil(Math.max(0,N.battery))+'%'; $('barfill').style.width=(Math.min(3,N.step)/3*100)+'%'; }
-    else { $('goalText').textContent='לראות פרק שלם'; $('goalCount').textContent=Math.floor(Math.min(1,N.watched/NIGHT.watchNeed)*100)+'%'; $('barfill').style.width=(Math.min(1,N.watched/NIGHT.watchNeed)*100)+'%'; }
+    const N=play.nt; if(N.part==='A' || cur().id==='night'){ $('goalText').textContent = (N.fetch||N.part==='B') ? 'ניצן הולך להביא את המטען' : 'לשכנע את ניצן להביא את המטען'; $('goalCount').textContent='סוללה '+Math.ceil(Math.max(0,N.battery))+'%'; $('barfill').style.width=(Math.min(3,N.step)/3*100)+'%'; }
+    else if(N.run && N.run.boss){ const B=N.run.boss; $('goalText').textContent='לנצח את '+BS_NAME; $('goalCount').textContent=Math.ceil(B.bHP)+'%'; $('barfill').style.width=((1-B.bHP/BOSS.bHP)*100)+'%'; } /* boss fight, 27.11.2026 */
+    else { const got = N.run ? N.run.got : N.end ? 4 : 0; $('goalText').textContent='לתפוס 4 רבעי פרק'; $('goalCount').textContent=got+'/4'; $('barfill').style.width=(got/4*100)+'%'; } /* runner, 27.11.2026 */
   } else if(play.mode==='coffee'){
     const c=play.coffee; $('goalCount').textContent = Math.round(c.temp)+'°';
     $('goalText').textContent = c.part==='B' ? 'לסיים את הכוס לפני שהיא קרה מדי' : c.part==='A' ? 'חצי כוס, כל עוד חם' : 'ישיבה עם מהנדס העיר';
